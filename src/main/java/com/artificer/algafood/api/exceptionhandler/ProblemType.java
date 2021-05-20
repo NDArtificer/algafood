@@ -10,6 +10,7 @@ public enum ProblemType {
 	ENTIDADE_NAO_ENCONTRADA("/entidade-nao-encontrada", "Entidade não encontrada"),
 	ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
 	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"), 
+	PAREMETRO_INVALIDO("/paramentro-invalido", "Parâmetro Inválido"), 
 	PROPRIEDADE_DESCONHECIDA("/propriedade-desconhecida","Propriedade Desconhecida");
 	
 	private String uri;
