@@ -1,5 +1,9 @@
 package com.artificer.algafood.api.exceptionhandler;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -11,14 +15,19 @@ import lombok.Getter;
 @Builder
 public class Problem {
 
-	
 	private Integer status;
 	private String type;
 	private String title;
 	private String detail;
-	
-	//private LocalDateTime dataHora;
-	//private String mensagem;
-	
-	
+	private LocalDateTime timeStamp;
+	private String userMensagem;
+	private List<Field> fields;
+
+	@Getter
+	@Builder
+	public static class Field {
+		private String name;
+		private String userMessage;
+	}
+
 }
