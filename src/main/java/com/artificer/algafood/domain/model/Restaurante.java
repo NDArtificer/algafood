@@ -23,11 +23,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.artificer.algafood.Groups.cadastroRestaurante;
+import com.artificer.algafood.Groups;
+import com.artificer.algafood.Groups.CozinhaId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -43,18 +46,17 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
-	@NotEmpty
-	@NotBlank(groups = cadastroRestaurante.class)
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 
-	@PositiveOrZero(groups = cadastroRestaurante.class)
+	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
 	@Valid
-	@NotNull(groups = cadastroRestaurante.class)
+	@NotNull
+	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@JsonIgnoreProperties("hibernateLazyInitializer")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)

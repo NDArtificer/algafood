@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.artificer.algafood.Groups.cadastroRestaurante;
+import com.artificer.algafood.Groups.CozinhaId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Cozinha {
 
 	@Id
-	@NotNull(groups = cadastroRestaurante.class)
+	@NotNull(groups = CozinhaId.class)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
