@@ -1,4 +1,4 @@
-package com.artificer.algafood;
+package com.artificer.algafood.core.validation;
 
 public interface Groups {
 

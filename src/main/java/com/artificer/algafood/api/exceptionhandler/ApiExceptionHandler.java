@@ -206,9 +206,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.collect(Collectors.toList());
 
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String details = String.format("Uma ou mais propriedades estão inválidas.");
 		String detail = String.format("Uma ou mais propriedades estão inválidas, Corrija-as e tente novamente.");
 
-		Problem problem = createProblemBuilder(status, problemType, detail)
+		Problem problem = createProblemBuilder(status, problemType, details)
 				.timeStamp(LocalDateTime.now())
 				.userMensagem(detail)
 				.fields(fields)

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.artificer.algafood.Groups;
+import com.artificer.algafood.core.validation.Groups;
 
 import lombok.Getter;
 import lombok.Setter;

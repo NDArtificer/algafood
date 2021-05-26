@@ -8,8 +8,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.artificer.algafood.Groups.CozinhaId;
-import com.artificer.algafood.Groups.EstadoId;
+import com.artificer.algafood.core.validation.Groups.EstadoId;
 
 import lombok.Getter;
 import lombok.Setter;
