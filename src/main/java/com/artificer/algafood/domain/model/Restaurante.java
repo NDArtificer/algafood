@@ -26,6 +26,7 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.artificer.algafood.core.validation.FreteZeroIncluiDescricao;
 import com.artificer.algafood.core.validation.Groups;
 import com.artificer.algafood.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
+@FreteZeroIncluiDescricao(valorField = "taxaFrete", descriptionField = "nome", descriptionRequired = "Frete Grátis")
 @Getter
 @Setter
 @Entity
@@ -72,12 +74,12 @@ public class Restaurante {
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
-	
+
 	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataAtualizacao;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
