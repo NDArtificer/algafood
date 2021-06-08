@@ -1,6 +1,6 @@
 package com.artificer.algafood.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +52,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREESIVEL;
 		String detail = "Corpo da requisição está inválido. Verifique a sintaxe da chamada.";
 
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now())
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
 				.userMensagem(detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
@@ -90,7 +90,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				"A propriedade '%s' recebeu o valor '%s', que é inválido. Corrija e informe um valor do tipo '%s'",
 				ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now())
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
 				.userMensagem(MSG_UNSPECTED_ERROR).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
@@ -106,7 +106,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				"A propriedade '%s' recebeu o valor '%s', que é inválido. Corrija e informe um valor do tipo '%s'",
 				path, ex.getValue(), ex.getTargetType().getSimpleName());
 
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now())
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
 				.userMensagem(MSG_UNSPECTED_ERROR).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
@@ -119,7 +119,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now())
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
 				.userMensagem(detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
@@ -133,7 +133,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
 		String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now())
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
 				.userMensagem(detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
@@ -147,7 +147,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
 		String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now()).build();
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now()).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -160,7 +160,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String.format(MSG_UNSPECTED_ERROR);
 
 		ex.printStackTrace();
-		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(LocalDateTime.now()).build();
+		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now()).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -208,7 +208,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			return Problem.Object.builder().name(name).userMessage(message).build();
 		}).collect(Collectors.toList());
 
-		Problem problem = createProblemBuilder(status, problemType, details).timeStamp(LocalDateTime.now())
+		Problem problem = createProblemBuilder(status, problemType, details).timeStamp(OffsetDateTime.now())
 				.userMensagem(detail).objects(fields).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);

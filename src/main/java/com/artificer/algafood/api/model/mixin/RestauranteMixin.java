@@ -1,6 +1,5 @@
 package com.artificer.algafood.api.model.mixin;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,10 @@ public abstract class RestauranteMixin {
 	@JsonIgnore
 	private Endereco endereco;
 
-	//@JsonIgnore
+	@JsonIgnore
 	private OffsetDateTime dataCadastro;
 
-	//@JsonIgnore
+	@JsonIgnore
 	private OffsetDateTime dataAtualizacao;
 
 	@JsonIgnore

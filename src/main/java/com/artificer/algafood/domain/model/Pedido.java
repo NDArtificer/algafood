@@ -1,7 +1,7 @@
 package com.artificer.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -40,19 +40,19 @@ public class Pedido {
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataCriacao;
+	private OffsetDateTime dataCriacao;
 	
 	@UpdateTimestamp
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime dataConfirmacao;
+	private OffsetDateTime dataConfirmacao;
 	
 	@UpdateTimestamp
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime dataCancelamento;
+	private OffsetDateTime dataCancelamento;
 	
 	@UpdateTimestamp
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime dataEntrega;
+	private OffsetDateTime dataEntrega;
 	
 	@Enumerated(EnumType.STRING)
 	private StatusPedido statusPedido;
