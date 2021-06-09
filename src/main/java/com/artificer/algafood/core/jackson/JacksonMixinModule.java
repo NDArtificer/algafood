@@ -6,13 +6,11 @@ import com.artificer.algafood.api.model.mixin.CidadeMixin;
 import com.artificer.algafood.api.model.mixin.CozinhaMixin;
 import com.artificer.algafood.api.model.mixin.GrupoMixin;
 import com.artificer.algafood.api.model.mixin.PedidoMixin;
-import com.artificer.algafood.api.model.mixin.RestauranteMixin;
 import com.artificer.algafood.api.model.mixin.UsuarioMixin;
 import com.artificer.algafood.domain.model.Cidade;
 import com.artificer.algafood.domain.model.Cozinha;
 import com.artificer.algafood.domain.model.Grupo;
 import com.artificer.algafood.domain.model.Pedido;
-import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.model.Usuario;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -22,7 +20,6 @@ public class JacksonMixinModule extends SimpleModule {
 	private static final long serialVersionUID = 1L;
 
 	public JacksonMixinModule() {
-		setMixInAnnotation(Restaurante.class, RestauranteMixin.class);
 		setMixInAnnotation(Cozinha.class, CozinhaMixin.class);
 		setMixInAnnotation(Cidade.class, CidadeMixin.class);
 		setMixInAnnotation(Pedido.class, PedidoMixin.class);
