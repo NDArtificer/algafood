@@ -1,4 +1,4 @@
-package com.artificer.algafood.api.converter;
+package com.artificer.algafood.api.converter.input;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

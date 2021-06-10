@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -26,14 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.artificer.algafood.api.converter.RestauranteInputConveter;
-import com.artificer.algafood.api.converter.RestauranteModelConverter;
+import com.artificer.algafood.api.converter.input.RestauranteInputConveter;
+import com.artificer.algafood.api.converter.model.RestauranteModelConverter;
 import com.artificer.algafood.api.model.RestauranteModel;
 import com.artificer.algafood.api.model.input.RestauranteInput;
 import com.artificer.algafood.core.validation.ValidationsException;
 import com.artificer.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.artificer.algafood.domain.exception.NegocioException;
-import com.artificer.algafood.domain.model.Cozinha;
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.repository.RestauranteRepository;
 import com.artificer.algafood.domain.service.CadastroRestauranteService;
@@ -90,14 +88,9 @@ public class RestauranteController {
 			@RequestBody @Valid RestauranteInput restauranteInput) {
 
 		try {
-			//Restaurante restaurante = inputConveter.toDomainObject(restauranteInput);
 
 			Restaurante restauranteAtual = cadastroRestaurante.buscar(restauranteId);
-			
 			inputConveter.copyToDomainObject(restauranteInput, restauranteAtual);
-			
-//			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
-//					"produtos");
 
 			return modelConverter.toModel(cadastroRestaurante.salvar(restauranteAtual));
 

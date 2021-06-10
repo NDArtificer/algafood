@@ -1,4 +1,4 @@
-package com.artificer.algafood.api.converter;
+package com.artificer.algafood.api.converter.model;
 
 import java.util.List;
 import java.util.stream.Collectors;
