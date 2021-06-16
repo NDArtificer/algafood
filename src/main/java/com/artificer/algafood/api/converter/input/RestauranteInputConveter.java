@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.artificer.algafood.api.model.input.RestauranteInput;
+import com.artificer.algafood.domain.model.Cidade;
 import com.artificer.algafood.domain.model.Cozinha;
 import com.artificer.algafood.domain.model.Restaurante;
 
@@ -24,9 +25,15 @@ public class RestauranteInputConveter {
 
 	public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
 		// * Para mitigar a exception:
-		// *org.hibernate.HibernateException: identifier of an instance of com.artificer.algafood.domain.model.Cozinha was altered from 1 to 3
+		// *org.hibernate.HibernateException: identifier of an instance of
+		// com.artificer.algafood.domain.model.Cozinha was altered from 1 to 3
 		restaurante.setCozinha(new Cozinha());
+
+		if (restaurante.getEndereco() != null) {
+			restaurante.getEndereco().setCidade(new Cidade());
+		}
+
 		modelMapper.map(restauranteInput, restaurante);
 	}
-	
+
 }

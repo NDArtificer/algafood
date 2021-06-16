@@ -31,6 +31,7 @@ import com.artificer.algafood.api.converter.model.RestauranteModelConverter;
 import com.artificer.algafood.api.model.RestauranteModel;
 import com.artificer.algafood.api.model.input.RestauranteInput;
 import com.artificer.algafood.core.validation.ValidationsException;
+import com.artificer.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.artificer.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Restaurante;
@@ -79,7 +80,7 @@ public class RestauranteController {
 
 			return modelConverter.toModel(cadastroRestaurante.salvar(restaurante));
 
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
@@ -95,8 +96,7 @@ public class RestauranteController {
 
 			return modelConverter.toModel(cadastroRestaurante.salvar(restauranteAtual));
 
-		} catch (CozinhaNaoEncontradaException e) {
-
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 
@@ -150,14 +150,13 @@ public class RestauranteController {
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
 		}
 	}
-	
+
 	@PutMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void ativar(@PathVariable Long restauranteId) {
 		cadastroRestaurante.ativar(restauranteId);
 	}
-	
-	
+
 	@DeleteMapping("/{restauranteId}/inativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativar(@PathVariable Long restauranteId) {
