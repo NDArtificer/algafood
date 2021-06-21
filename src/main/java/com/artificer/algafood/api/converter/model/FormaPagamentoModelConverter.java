@@ -1,5 +1,6 @@
 package com.artificer.algafood.api.converter.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class FormaPagamentoModelConverter {
 		return modelMapper.map(formaPagamento, FormaPagamentoModel.class);
 	}
 
-	public List<FormaPagamentoModel> toColletionModel(List<FormaPagamento> formaPagamentos) {
+	public List<FormaPagamentoModel> toColletionModel(Collection<FormaPagamento> formaPagamentos) {
 		return formaPagamentos.stream().map(formaPagamento -> toModel(formaPagamento)).collect(Collectors.toList());
 	}
 	
