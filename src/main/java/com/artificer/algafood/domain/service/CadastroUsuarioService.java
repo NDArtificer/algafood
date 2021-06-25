@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.exception.UsuarioNaoEncontradaException;
+import com.artificer.algafood.domain.model.Grupo;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.repository.UsuarioRepository;
 
@@ -17,7 +18,10 @@ public class CadastroUsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
+	
+	@Autowired
+	private CadastroGrupoService cadastroGrupo;
+	
 	public Usuario buscar(Long usuarioId) {
 		return usuarioRepository.findById(usuarioId).orElseThrow(() -> new UsuarioNaoEncontradaException(usuarioId));
 	}
@@ -44,6 +48,20 @@ public class CadastroUsuarioService {
 		}
 
 		usuario.setSenha(novaSenha);
+	}
+
+	@Transactional
+	public void associarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscar(grupoId);
+		usuario.adicionarGrupo(grupo);
+	}
+
+	@Transactional
+	public void desassociarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscar(grupoId);
+		usuario.removerGrupo(grupo);
 	}
 
 }

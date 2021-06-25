@@ -1,5 +1,6 @@
 package com.artificer.algafood.api.converter.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class GrupoModelConverter {
 		return modelMapper.map(grupo, GrupoModel.class);
 	}
 
-	public List<GrupoModel> toColletionModel(List<Grupo> grupos) {
+	public List<GrupoModel> toColletionModel(Collection<Grupo> grupos) {
 		return grupos.stream().map(grupo -> toModel(grupo)).collect(Collectors.toList());
 	}
 	
