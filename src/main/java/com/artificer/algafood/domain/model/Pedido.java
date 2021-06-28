@@ -26,58 +26,77 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Entity
 public class Pedido {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column
-	private BigDecimal subTotal;
+	private BigDecimal subtotal;
 	@Column
 	private BigDecimal taxaFrete;
-	
+
 	@Column
 	private BigDecimal valorTotal;
-	
+
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataCriacao;
-	
+
 	@UpdateTimestamp
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataConfirmacao;
-	
+
 	@UpdateTimestamp
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataCancelamento;
-	
+
 	@UpdateTimestamp
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataEntrega;
-	
-	@Enumerated(EnumType.STRING)
-	private StatusPedido statusPedido;
-	
-	@Embedded
-	private Endereco endereco;
-	 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private FormaPagamento formaPagamento;
-    
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "usuario_cliente_id", nullable = false)
-    private Usuario cliente;
-    
-    @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itens = new ArrayList<>();
 
+	@Enumerated(EnumType.STRING)
+	private StatusPedido status = StatusPedido.CRIADO;
+
+	@Embedded
+	@JoinColumn(nullable = false)
+	private Endereco endereco;
+
+	@ManyToOne
+	private Restaurante restaurante;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private FormaPagamento formaPagamento;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "usuario_cliente_id", nullable = false)
+	private Usuario cliente;
+
+	@OneToMany(mappedBy = "pedido")
+	private List<ItemPedido> itens = new ArrayList<>();
+
+	public void calcularValorTotal() {
+		this.subtotal = getItens().stream()
+				.map(item -> item.getPrecoTotal())
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		this.valorTotal = this.subtotal.add(this.taxaFrete);
+	}
+
+	public void definirFrete() {
+		setTaxaFrete(getRestaurante().getTaxaFrete());
+	}
+	
+	public void atribuirPedidsAosItens() {
+		getItens().forEach(item -> item.setPedido(this));
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -102,6 +121,5 @@ public class Pedido {
 			return false;
 		return true;
 	}
-
 
 }
