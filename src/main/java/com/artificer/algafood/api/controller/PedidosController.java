@@ -48,9 +48,9 @@ public class PedidosController {
 		return modelResumoConverter.toColletionModel(pedidoRepository.findAll());
 	}
 
-	@GetMapping("/{pedidoId}")
-	private PedidoModel buscar(@PathVariable Long pedidoId) {
-		return modelConverter.toModel(cadastroPedido.buscar(pedidoId));
+	@GetMapping("/{codidoPedido}")
+	private PedidoModel buscar(@PathVariable String codidoPedido) {
+		return modelConverter.toModel(cadastroPedido.buscar(codidoPedido));
 	}
 
 	@PostMapping

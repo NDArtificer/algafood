@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,11 +19,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.artificer.algafood.domain.enums.StatusPedido;
+import com.artificer.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -36,6 +39,9 @@ public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column
+	private String codigo;
 
 	@Column
 	private BigDecimal subtotal;
@@ -70,7 +76,7 @@ public class Pedido {
 
 	@ManyToOne
 	private Restaurante restaurante;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private FormaPagamento formaPagamento;
@@ -85,22 +91,49 @@ public class Pedido {
 
 	public void calcularValorTotal() {
 		getItens().forEach(ItemPedido::calcularPrecoTotal);
-		
-		this.subtotal = getItens().stream()
-				.map(item -> item.getPrecoTotal())
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
-		
+
+		this.subtotal = getItens().stream().map(item -> item.getPrecoTotal()).reduce(BigDecimal.ZERO, BigDecimal::add);
+
 		this.valorTotal = this.subtotal.add(this.taxaFrete);
 	}
 
 	public void definirFrete() {
 		setTaxaFrete(getRestaurante().getTaxaFrete());
 	}
-	
+
 	public void atribuirPedidsAosItens() {
 		getItens().forEach(item -> item.setPedido(this));
 	}
-	
+
+	public void confirmar() {
+		setStatus(StatusPedido.CONFIRMADO);
+		setDataConfirmacao(OffsetDateTime.now());
+	}
+
+	public void cancelar() {
+		setStatus(StatusPedido.CANCELADO);
+		setDataCancelamento(OffsetDateTime.now());
+	}
+
+	public void entregar() {
+		setStatus(StatusPedido.ENTREGUE);
+		setDataEntrega(OffsetDateTime.now());
+	}
+
+	private void setStatus(StatusPedido novoStatus) {
+		if (getStatus().naoPodeAleterarPara(novoStatus)) {
+			throw new NegocioException(String.format("O status do pedido %s não pode ser alterado de %s para %s!",
+					getCodigo(), getStatus().getDescricao(), novoStatus.getDescricao()));
+		}
+
+		this.status = novoStatus;
+	}
+
+	@PrePersist
+	private void gerarCodigo() {
+		setCodigo(UUID.randomUUID().toString());
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
