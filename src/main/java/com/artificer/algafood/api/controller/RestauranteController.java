@@ -30,6 +30,7 @@ import com.artificer.algafood.api.converter.input.RestauranteInputConveter;
 import com.artificer.algafood.api.converter.model.RestauranteModelConverter;
 import com.artificer.algafood.api.model.RestauranteModel;
 import com.artificer.algafood.api.model.input.RestauranteInput;
+import com.artificer.algafood.api.model.views.RestauranteView;
 import com.artificer.algafood.core.validation.ValidationsException;
 import com.artificer.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.artificer.algafood.domain.exception.CozinhaNaoEncontradaException;
@@ -38,6 +39,7 @@ import com.artificer.algafood.domain.exception.RestauranteNaoEncontradoException
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.repository.RestauranteRepository;
 import com.artificer.algafood.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -61,8 +63,15 @@ public class RestauranteController {
 	private SmartValidator validator;
 
 	@GetMapping
+	@JsonView(RestauranteView.Resumo.class)
 	public List<RestauranteModel> listar() {
 		return modelConverter.toColletionModel(restauranteRepository.findAll());
+	}
+	
+	@JsonView(RestauranteView.Nome.class)
+	@GetMapping(params = "projecao=nome")
+	public List<RestauranteModel> listarNome() {
+		return listar();
 	}
 
 	@GetMapping("/{restauranteId}")
