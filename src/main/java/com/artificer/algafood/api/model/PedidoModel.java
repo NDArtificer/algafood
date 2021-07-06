@@ -12,6 +12,7 @@ import lombok.Setter;
 public class PedidoModel {
 
 	private String codigo;
+	private BigDecimal valorTotal;
 	private BigDecimal subtotal;
 	private BigDecimal taxaFrete;
 	private String statusPedido;
