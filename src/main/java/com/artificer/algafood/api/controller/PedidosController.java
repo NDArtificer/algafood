@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +26,9 @@ import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Pedido;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.repository.PedidoRepository;
+import com.artificer.algafood.domain.repository.filter.PedidoFilter;
 import com.artificer.algafood.domain.service.CadastroPedidoService;
+import com.artificer.algafood.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -44,8 +50,12 @@ public class PedidosController {
 	private CadastroPedidoService cadastroPedido;
 
 	@GetMapping
-	private List<PedidoResumoModel> listar() {
-		return modelResumoConverter.toColletionModel(pedidoRepository.findAll());
+	private Page<PedidoResumoModel> listar(PedidoFilter filter, @PageableDefault(size = 5) Pageable pageable) {
+		Page<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
+		List<PedidoResumoModel> pedidosResumidos = modelResumoConverter.toColletionModel(pedidos.getContent());
+		Page<PedidoResumoModel> pedidosResumidosPages = new PageImpl<>(pedidosResumidos, pageable,
+				pedidos.getTotalElements());
+		return pedidosResumidosPages;
 	}
 
 	@GetMapping("/{codigoPedido}")
