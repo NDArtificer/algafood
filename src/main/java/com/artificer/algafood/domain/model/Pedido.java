@@ -55,15 +55,15 @@ public class Pedido {
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataCriacao;
 
-	@UpdateTimestamp
+	
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataConfirmacao;
 
-	@UpdateTimestamp
+	
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataCancelamento;
 
-	@UpdateTimestamp
+
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataEntrega;
 
