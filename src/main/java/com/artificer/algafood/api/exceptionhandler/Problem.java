@@ -19,7 +19,7 @@ public class Problem {
 	private String title;
 	private String detail;
 	private OffsetDateTime timeStamp;
-	private String userMensagem;
+	private String userMessage;
 	private List<Object> objects;
 
 	@Getter

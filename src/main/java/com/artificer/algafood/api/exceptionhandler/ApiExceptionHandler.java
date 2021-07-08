@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -39,6 +40,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private MessageSource messageSource;
 
 	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+			WebRequest request) {
+
+		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
+	}
+
+	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
@@ -53,7 +61,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = "Corpo da requisição está inválido. Verifique a sintaxe da chamada.";
 
 		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
-				.userMensagem(detail).build();
+				.userMessage(detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -66,7 +74,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String
 				.format("A propriedade '%s' é desconhecida. Corrija ou remova a propriedade e tente novamente!", path);
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMensagem(MSG_UNSPECTED_ERROR).build();
+		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_UNSPECTED_ERROR).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -91,7 +99,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
 		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
-				.userMensagem(MSG_UNSPECTED_ERROR).build();
+				.userMessage(MSG_UNSPECTED_ERROR).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -107,7 +115,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				path, ex.getValue(), ex.getTargetType().getSimpleName());
 
 		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
-				.userMensagem(MSG_UNSPECTED_ERROR).build();
+				.userMessage(MSG_UNSPECTED_ERROR).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -120,7 +128,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = ex.getMessage();
 
 		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
-				.userMensagem(detail).build();
+				.userMessage(detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 
@@ -134,7 +142,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = ex.getMessage();
 
 		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
-				.userMensagem(detail).build();
+				.userMessage(detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 
@@ -209,7 +217,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}).collect(Collectors.toList());
 
 		Problem problem = createProblemBuilder(status, problemType, details).timeStamp(OffsetDateTime.now())
-				.userMensagem(detail).objects(fields).build();
+				.userMessage(detail).objects(fields).build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
 
