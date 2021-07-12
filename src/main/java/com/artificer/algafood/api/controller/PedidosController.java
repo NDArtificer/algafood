@@ -1,6 +1,7 @@
 package com.artificer.algafood.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -22,6 +23,7 @@ import com.artificer.algafood.api.converter.model.PedidoResumoModelConverter;
 import com.artificer.algafood.api.model.PedidoModel;
 import com.artificer.algafood.api.model.PedidoResumoModel;
 import com.artificer.algafood.api.model.input.PedidoInput;
+import com.artificer.algafood.core.data.PageableTranslator;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Pedido;
 import com.artificer.algafood.domain.model.Usuario;
@@ -51,6 +53,8 @@ public class PedidosController {
 
 	@GetMapping
 	private Page<PedidoResumoModel> listar(PedidoFilter filter, @PageableDefault(size = 5) Pageable pageable) {
+		pageable = convertPage(pageable);
+		
 		Page<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
 		List<PedidoResumoModel> pedidosResumidos = modelResumoConverter.toColletionModel(pedidos.getContent());
 		Page<PedidoResumoModel> pedidosResumidosPages = new PageImpl<>(pedidosResumidos, pageable,
@@ -77,4 +81,17 @@ public class PedidosController {
 		}
 	}
 
+	
+	private Pageable convertPage(Pageable apiPage) {
+		var mapeamento = Map.of(
+				"codigo","codigo",
+				"restaurante.nome", "restaurante.nome",
+				"nomeCliente","cliente.nome",
+				"cliente.nome","cliente.nome",
+				"valorTotal", "valorTotal"
+				);
+		
+		return PageableTranslator.translate(apiPage, mapeamento);
+	}
+	
 }
