@@ -9,5 +9,5 @@ import com.artificer.algafood.domain.repository.filter.VendaDiariaFilter;
 
 @Service
 public interface VendasQueriesServices {
-	List<VendasDiaria> consultarVendasDiarias(VendaDiariaFilter filtro);
+	List<VendasDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, String timeOffSet);
 }

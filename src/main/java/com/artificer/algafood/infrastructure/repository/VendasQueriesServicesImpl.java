@@ -23,7 +23,7 @@ public class VendasQueriesServicesImpl implements VendasQueriesServices {
 	private EntityManager entity;
 
 	@Override
-	public List<VendasDiaria> consultarVendasDiarias(VendaDiariaFilter filtro) {
+	public List<VendasDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, String timeOffSet) {
 		var predicates = new ArrayList<Predicate>();
 
 		var builder = entity.getCriteriaBuilder();
@@ -41,7 +41,11 @@ public class VendasQueriesServicesImpl implements VendasQueriesServices {
 		if (filtro.getDataCriacaoFim() != null) {
 			predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), filtro.getDataCriacaoFim()));
 		}
-		var functionDateDataCriacao = builder.function("date", Date.class, root.get("dataCriacao"));
+
+		var functionConvertTzDataCriacao = builder.function("convert_tz", Date.class, root.get("dataCriacao"),
+				builder.literal("+00:00"), builder.literal(timeOffSet));
+
+		var functionDateDataCriacao = builder.function("date", Date.class, functionConvertTzDataCriacao);
 
 		var selector = builder.construct(VendasDiaria.class, functionDateDataCriacao, builder.count(root.get("id")),
 				builder.sum(root.get("valorTotal")));
