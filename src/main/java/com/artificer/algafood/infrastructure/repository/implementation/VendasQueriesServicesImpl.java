@@ -1,4 +1,4 @@
-package com.artificer.algafood.infrastructure.repository;
+package com.artificer.algafood.infrastructure.repository.implementation;
 
 import java.util.ArrayList;
 import java.util.Date;
