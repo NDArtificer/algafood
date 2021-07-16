@@ -22,7 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import com.artificer.algafood.domain.enums.StatusPedido;
 import com.artificer.algafood.domain.exception.NegocioException;
