@@ -1,9 +1,12 @@
 package com.artificer.algafood.api.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +26,7 @@ import com.artificer.algafood.domain.service.CatalogoImagemProdutoService;
 public class RestauranteProdutoImagemController {
 	@Autowired
 	private CadastroProdutoService produtoService;
-	
+
 	@Autowired
 	private ImagemProdutoModelConverter modelConverter;
 
@@ -32,7 +35,7 @@ public class RestauranteProdutoImagemController {
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ImagemProdutoModel atualizarImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId,
-			@Valid ImagemProdutoInput produtoInput) {
+			@Valid ImagemProdutoInput produtoInput) throws IOException {
 		Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
 
 		MultipartFile file = produtoInput.getFile();
@@ -44,7 +47,13 @@ public class RestauranteProdutoImagemController {
 		foto.setTamanho(file.getSize());
 		foto.setNomeArquivo(file.getOriginalFilename());
 
-		return modelConverter.toModel(imagemProdutoService.salvar(foto));
+		return modelConverter.toModel(imagemProdutoService.salvar(foto, file.getInputStream()));
+	}
+
+	@GetMapping
+	public ImagemProdutoModel buscarImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+
+		return modelConverter.toModel(imagemProdutoService.buscar(restauranteId, produtoId));
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.artificer.algafood.infrastructure.repository.service;
+package com.artificer.algafood.infrastructure.repository.service.report;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.artificer.algafood.domain.repository.filter.VendaDiariaFilter;
 import com.artificer.algafood.domain.service.VendasQueriesServices;
 import com.artificer.algafood.domain.service.VendasReportService;
-import com.artificer.algafood.infrastructure.repository.service.report.ReportException;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
