@@ -1,25 +1,36 @@
 package com.artificer.algafood.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.artificer.algafood.api.converter.model.ImagemProdutoModelConverter;
 import com.artificer.algafood.api.model.ImagemProdutoModel;
 import com.artificer.algafood.api.model.input.ImagemProdutoInput;
+import com.artificer.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.artificer.algafood.domain.model.FotoProduto;
 import com.artificer.algafood.domain.model.Produto;
 import com.artificer.algafood.domain.service.CadastroProdutoService;
 import com.artificer.algafood.domain.service.CatalogoImagemProdutoService;
+import com.artificer.algafood.domain.service.FotoStorageService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/imagem")
@@ -29,6 +40,9 @@ public class RestauranteProdutoImagemController {
 
 	@Autowired
 	private ImagemProdutoModelConverter modelConverter;
+
+	@Autowired
+	private FotoStorageService fotoService;
 
 	@Autowired
 	private CatalogoImagemProdutoService imagemProdutoService;
@@ -49,11 +63,48 @@ public class RestauranteProdutoImagemController {
 
 		return modelConverter.toModel(imagemProdutoService.salvar(foto, file.getInputStream()));
 	}
+	
+	@DeleteMapping
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void excluirImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+		imagemProdutoService.excluir(restauranteId, produtoId);
+	}
 
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ImagemProdutoModel buscarImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 
 		return modelConverter.toModel(imagemProdutoService.buscar(restauranteId, produtoId));
+	}
+
+	@GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<InputStreamResource> servirImagem(@PathVariable Long restauranteId,
+			@RequestHeader(name = "accept") String acceptHeader, @PathVariable Long produtoId)
+			throws HttpMediaTypeNotAcceptableException {
+		try {
+			FotoProduto foto = imagemProdutoService.buscar(restauranteId, produtoId);
+
+			MediaType mediaTypeFoto = MediaType.parseMediaType(foto.getContentType());
+			List<MediaType> mediasAceitas = MediaType.parseMediaTypes(acceptHeader);
+
+			verificarCompatibilidadeMediaType(mediaTypeFoto, mediasAceitas);
+
+			InputStream inputStream = fotoService.recuperar(foto.getNomeArquivo());
+
+			return ResponseEntity.ok().contentType(mediaTypeFoto).body(new InputStreamResource(inputStream));
+
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+
+	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, List<MediaType> mediasAceitas)
+			throws HttpMediaTypeNotAcceptableException {
+		boolean compativel = mediasAceitas.stream()
+				.anyMatch(mediasAceita -> mediasAceita.isCompatibleWith(mediaTypeFoto));
+		if (!compativel) {
+			throw new HttpMediaTypeNotAcceptableException(mediasAceitas);
+		}
 	}
 
 }

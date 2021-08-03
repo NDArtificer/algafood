@@ -40,10 +40,7 @@ public class CatalogoImagemProdutoService {
 		foto = produtoRepository.save(foto);
 		produtoRepository.flush();
 
-		NovaFoto novaFoto = NovaFoto.builder()
-				.nomeArquivo(foto.getNomeArquivo())
-				.inputStream(dadosArquivo)
-				.build();
+		NovaFoto novaFoto = NovaFoto.builder().nomeArquivo(foto.getNomeArquivo()).contentType(foto.getContentType()).size(foto.getTamanho()).inputStream(dadosArquivo).build();
 
 		storageService.substituir(arquivoExistente, novaFoto);
 
@@ -55,6 +52,18 @@ public class CatalogoImagemProdutoService {
 	public FotoProduto buscar(Long restauranteId, Long produtoId) {
 		return produtoRepository.findFotoById(restauranteId, produtoId)
 				.orElseThrow(() -> new FotoNaoEncontradaException(produtoId, restauranteId));
+	}
+
+	@Transactional
+	public void excluir(Long restauranteId, Long produtoId) {
+
+		FotoProduto fotoExistente = buscar(restauranteId, produtoId);
+
+		produtoRepository.delete(fotoExistente);
+		produtoRepository.flush();
+
+		storageService.remover(fotoExistente.getNomeArquivo());
+
 	}
 
 }

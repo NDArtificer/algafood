@@ -48,4 +48,5 @@ public class CadastroProdutoService {
 		Produto produto = buscarOuFalhar(restauranteId, produtoId);
 		produto.inativar();
 	}
+
 }

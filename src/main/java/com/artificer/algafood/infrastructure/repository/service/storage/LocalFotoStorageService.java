@@ -6,20 +6,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.bouncycastle.util.StoreException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import com.artificer.algafood.core.storage.StorageProperties;
 import com.artificer.algafood.domain.service.FotoStorageService;
 
-@Service
+//@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
-	@Value("${algafood.storage.local.diretorio-fotos}")
-	private Path diretorioFotos;
+	@Autowired
+	private StorageProperties storageProperties;
 
 	private Path getArquivoPath(String nomeArquivo) {
-		return diretorioFotos.resolve(Path.of(nomeArquivo));
+		return storageProperties.getLocal()
+				.getDirectoryPhotos()
+				.resolve(Path.of(nomeArquivo));
 	}
 
 	@Override
@@ -41,7 +45,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 		} catch (IOException e) {
 			throw new StoreException("Não foi possível excluir o arquivo!", e);
 		}
-		
+
 	}
 
 	@Override
