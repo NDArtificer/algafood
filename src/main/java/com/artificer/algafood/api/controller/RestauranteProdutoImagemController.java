@@ -1,13 +1,13 @@
 package com.artificer.algafood.api.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +31,7 @@ import com.artificer.algafood.domain.model.Produto;
 import com.artificer.algafood.domain.service.CadastroProdutoService;
 import com.artificer.algafood.domain.service.CatalogoImagemProdutoService;
 import com.artificer.algafood.domain.service.FotoStorageService;
+import com.artificer.algafood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/imagem")
@@ -63,7 +64,7 @@ public class RestauranteProdutoImagemController {
 
 		return modelConverter.toModel(imagemProdutoService.salvar(foto, file.getInputStream()));
 	}
-	
+
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluirImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -88,10 +89,19 @@ public class RestauranteProdutoImagemController {
 
 			verificarCompatibilidadeMediaType(mediaTypeFoto, mediasAceitas);
 
-			InputStream inputStream = fotoService.recuperar(foto.getNomeArquivo());
+			FotoRecuperada inputStream = fotoService.recuperar(foto.getNomeArquivo());
 
-			return ResponseEntity.ok().contentType(mediaTypeFoto).body(new InputStreamResource(inputStream));
 
+			if (inputStream.hasUrl()) {
+				return ResponseEntity
+						.status(HttpStatus.FOUND)
+						.header(HttpHeaders.LOCATION, inputStream.getUrl())
+						.build();
+			} else {
+				return ResponseEntity.ok()
+						.contentType(mediaTypeFoto)
+						.body(new InputStreamResource(inputStream.getInputStream()));
+			}
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 		}
