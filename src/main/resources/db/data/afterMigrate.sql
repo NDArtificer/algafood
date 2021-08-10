@@ -94,7 +94,8 @@ insert into usuario (id, nome, email, senha, data_cadastro) values
 (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
 (3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
-(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
+(6, 'Denilson Nascimento', 'nd.nascimento.denilson@gmail.com', '123',utc_timestamp);
 
 insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);
 
@@ -103,7 +104,7 @@ insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values 
 insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
     status, data_criacao, subtotal, taxa_frete, valor_total)
-values (1, 'd85580c2-d6b7-42aa-a54d-3030e4b32da0', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+values (1, 'd85580c2-d6b7-42aa-a54d-3030e4b32da0', 1, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
 'CRIADO', utc_timestamp, 298.90, 10, 308.90);
 
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
@@ -116,7 +117,7 @@ values (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');
 insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
         endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
         status, data_criacao, subtotal, taxa_frete, valor_total)
-values (2, 'f49014ea-c338-4601-8e34-9bad1e987daa', 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+values (2, 'f49014ea-c338-4601-8e34-9bad1e987daa', 4, 6, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
 'CRIADO', utc_timestamp, 79, 0, 79);
 
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
