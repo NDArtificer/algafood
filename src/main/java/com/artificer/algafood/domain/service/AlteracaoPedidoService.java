@@ -32,6 +32,7 @@ public class AlteracaoPedidoService {
 		Pedido pedido = pedidoSerivce.buscar(codigoPedido);
 		pedido.cancelar();
 
+		pedidoRepository.save(pedido);
 	}
 
 	@Transactional
