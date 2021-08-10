@@ -26,15 +26,15 @@ public class PdfVendasReportService implements VendasReportService {
 
 		var inputStream = this.getClass().getResourceAsStream("/reports/vendas-diarias.jasper");
 
-		var paramtros = new HashMap<String, Object>();
-		paramtros.put("REPORT_LOCALE", new Locale("pt", "BR"));
+		var parametros = new HashMap<String, Object>();
+		parametros.put("REPORT_LOCALE", new Locale("pt", "BR"));
 
 		var vendasDiarias = vendaService.consultarVendasDiarias(vendas, timeOffSet);
 
 		var dataSource = new JRBeanCollectionDataSource(vendasDiarias);
 
 		try {
-			var jasperPrint = JasperFillManager.fillReport(inputStream, paramtros, dataSource);
+			var jasperPrint = JasperFillManager.fillReport(inputStream, parametros, dataSource);
 
 			return JasperExportManager.exportReportToPdf(jasperPrint);
 		} catch (JRException e) {

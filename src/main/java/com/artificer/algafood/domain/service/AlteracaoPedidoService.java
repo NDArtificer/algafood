@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artificer.algafood.domain.model.Pedido;
+import com.artificer.algafood.domain.repository.PedidoRepository;
 
 @Service
 public class AlteracaoPedidoService {
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
 
 	@Autowired
 	private CadastroPedidoService pedidoSerivce;
@@ -19,6 +23,7 @@ public class AlteracaoPedidoService {
 		Pedido pedido = pedidoSerivce.buscar(codigoPedido);
 		pedido.confirmar();
 
+		pedidoRepository.save(pedido);
 	}
 
 	@Transactional

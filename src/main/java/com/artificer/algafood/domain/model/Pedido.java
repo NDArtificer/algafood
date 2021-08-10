@@ -22,8 +22,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import com.artificer.algafood.domain.enums.StatusPedido;
+import com.artificer.algafood.domain.event.PedidoConfirmadoEvent;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,7 +35,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Pedido {
+public class Pedido extends AbstractAggregateRoot<Pedido> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,6 +109,8 @@ public class Pedido {
 	public void confirmar() {
 		setStatus(StatusPedido.CONFIRMADO);
 		setDataConfirmacao(OffsetDateTime.now());
+		
+		registerEvent(new PedidoConfirmadoEvent(this));
 	}
 
 	public void cancelar() {
