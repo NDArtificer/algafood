@@ -26,6 +26,11 @@ import com.artificer.algafood.domain.model.Cidade;
 import com.artificer.algafood.domain.repository.CidadeRepository;
 import com.artificer.algafood.domain.service.CadastroCidadeService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
@@ -42,20 +47,27 @@ public class CidadeController {
 	@Autowired
 	private CidadeInputConverter cidadeInputConverter;
 
+	@ApiOperation("Lista as cidades")
 	@GetMapping
 	public List<CidadeModel> listar() {
 		return cidadeModelConverter.toColletionModel(cidadeRepository.findAll());
 	}
 
+	@ApiOperation("Busca uma cidade por Id")
 	@GetMapping("/{cidadeId}")
-	public CidadeModel buscar(@PathVariable Long cidadeId) {
+	public CidadeModel buscar(
+			@ApiParam(value = "Id de uma cidade", example = "1") 
+			@PathVariable Long cidadeId) {
 		return cidadeModelConverter.toModel(cadastroCidade.buscar(cidadeId));
 
 	}
 
+	@ApiOperation("Cadastra uma cidade")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
+	public CidadeModel adicionar(
+			@ApiParam(name ="Corpo", value = "Representação de uma nova cidade")
+			@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidade = cidadeInputConverter.toDomainObject(cidadeInput);
 			return cidadeModelConverter.toModel(cadastroCidade.salvar(cidade));
@@ -67,8 +79,13 @@ public class CidadeController {
 
 	}
 
+	@ApiOperation("Atualiza uma cidade por Id")
 	@PutMapping("/{cidadeId}")
-	public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
+	public CidadeModel atualizar(
+			@ApiParam(name ="Corpo", value = "Atualização de uma cidade")
+			@PathVariable Long cidadeId, 
+			@ApiParam(value = "Id de uma cidade", example = "1")  
+			@RequestBody @Valid CidadeInput cidadeInput) {
 
 		try {
 			Cidade cidadeAtual = cadastroCidade.buscar(cidadeId);
@@ -82,9 +99,10 @@ public class CidadeController {
 		}
 	}
 
+	@ApiOperation("Remove uma cidade por Id")
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long cidadeId) {
+	public void remover(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
 		cadastroCidade.excluir(cidadeId);
 
 	}
