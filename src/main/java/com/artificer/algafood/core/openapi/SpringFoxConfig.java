@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,13 +18,17 @@ import com.artificer.algafood.api.exceptionhandler.Problem;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -48,8 +53,21 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 					.globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
 		            .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
 		            .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+		            .globalRequestParameters(Arrays.asList(new RequestParameterBuilder()
+		            		.name("fields")
+		            		.description("Nomes das propriedades para filtrar a resposta, separados por virgula")
+		            		.in(ParameterType.QUERY)
+		            		.required(false)
+		            		.query(query -> query.model(
+		            				model -> model.scalarModel(
+		            						ScalarType.STRING)))
+		            		.build()))
 		            .additionalModels(typeresolver.resolve(Problem.class))
-					.tags(new Tag("Cidades", "Gerencia as Cidades"));
+		            .directModelSubstitute(Pageable.class, PagebleModel.class)
+					.tags(new Tag("Cidades", "Gerencia as Cidades"),
+						  new Tag("Grupos", "Gerencia os grupos de usuários"),
+						  new Tag("Cozinhas", "Gerencia as cozinhas"),
+						  new Tag("Formas de pagamento", "Gerencia as formas de pagamento"));
 	}
 	
 	private List<Response> globalGetResponseMessages() {
