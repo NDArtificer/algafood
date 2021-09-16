@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.artificer.algafood.api.converter.input.CidadeInputConverter;
 import com.artificer.algafood.api.converter.model.CidadeModelConverter;
 import com.artificer.algafood.api.model.CidadeModel;
 import com.artificer.algafood.api.model.input.CidadeInput;
+import com.artificer.algafood.api.utils.ResourceUriHelper;
 import com.artificer.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Cidade;
@@ -70,8 +72,11 @@ public class CidadeController {
 			@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidade = cidadeInputConverter.toDomainObject(cidadeInput);
-			return cidadeModelConverter.toModel(cadastroCidade.salvar(cidade));
-
+			CidadeModel cidadeModel= cidadeModelConverter.toModel(cadastroCidade.salvar(cidade));
+			ResourceUriHelper.addUriResourceHeader(cidadeModel.getId());
+			
+			return cidadeModel;
+			
 		} catch (EstadoNaoEncontradaException e) {
 
 			throw new NegocioException(e.getMessage(), e);
