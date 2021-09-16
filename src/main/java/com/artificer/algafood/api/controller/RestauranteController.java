@@ -43,6 +43,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -62,12 +67,21 @@ public class RestauranteController {
 	@Autowired
 	private SmartValidator validator;
 
+	@ApiOperation(value = "Lista Restaurante")
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nome da projeção de pedidos", 
+						  allowableValues = "apenas-nome", 
+						  name = "projecao",
+						  paramType = "query", 
+						  type = "string")	
+			})
 	@GetMapping
 	@JsonView(RestauranteView.Resumo.class)
 	public List<RestauranteModel> listar() {
 		return modelConverter.toColletionModel(restauranteRepository.findAll());
 	}
 	
+	@ApiOperation(value = "Lista Restaurante", hidden = true)
 	@JsonView(RestauranteView.Nome.class)
 	@GetMapping(params = "projecao=nome")
 	public List<RestauranteModel> listarNome() {

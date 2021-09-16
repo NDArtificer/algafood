@@ -52,6 +52,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 					.globalResponses(HttpMethod.GET, globalGetResponseMessages())
 					.globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
 		            .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+		            .globalResponses(HttpMethod.PATCH, globalPostPutResponseMessages())
 		            .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
 		            .globalRequestParameters(Arrays.asList(new RequestParameterBuilder()
 		            		.name("fields")
