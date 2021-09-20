@@ -1,15 +1,9 @@
 package com.artificer.algafood.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,55 +50,30 @@ public class CidadeController {
 	@ApiOperation("Lista as cidades")
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
-		List<CidadeModel> cidadesModel = cidadeModelConverter.toColletionModel(cidadeRepository.findAll());
-		
-		cidadesModel.forEach(cidadeModel ->{
-			
-			 cidadeModel.add(linkTo(methodOn(CidadeController.class)
-					 .buscar(cidadeModel.getId())).withSelfRel());			
-			 
-			 cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
-					 .buscar(cidadeModel.getEstado().getId())).withSelfRel());
-			
-		});
-		
-		 CollectionModel<CidadeModel> cidadesCollectionModel = CollectionModel.of(cidadesModel);	
-		 
-		 cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
-		 
-		 return cidadesCollectionModel;
+		return cidadeModelConverter.toCollectionModel(cidadeRepository.findAll());
 	}
 
 	@ApiOperation("Busca uma cidade por Id")
 	@GetMapping("/{cidadeId}")
-	public CidadeModel buscar(
-			@ApiParam(value = "Id de uma cidade", example = "1") 
-			@PathVariable Long cidadeId) {
-		 CidadeModel cidadeModel = cidadeModelConverter.toModel(cadastroCidade.buscar(cidadeId));
-		 
-		 cidadeModel.add(linkTo(methodOn(CidadeController.class)
-				 .listar()).withRel("cidades"));
-		 
-		 cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
-				 .buscar(cidadeModel.getEstado().getId())).withSelfRel());
-		 
-		 return cidadeModel;
-		 
+	public CidadeModel buscar(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
+		CidadeModel cidadeModel = cidadeModelConverter.toModel(cadastroCidade.buscar(cidadeId));
+
+		return cidadeModel;
+
 	}
 
 	@ApiOperation("Cadastra uma cidade")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeModel adicionar(
-			@ApiParam(name ="Corpo", value = "Representação de uma nova cidade")
-			@RequestBody @Valid CidadeInput cidadeInput) {
+			@ApiParam(name = "Corpo", value = "Representação de uma nova cidade") @RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidade = cidadeInputConverter.toDomainObject(cidadeInput);
-			CidadeModel cidadeModel= cidadeModelConverter.toModel(cadastroCidade.salvar(cidade));
+			CidadeModel cidadeModel = cidadeModelConverter.toModel(cadastroCidade.salvar(cidade));
 			ResourceUriHelper.addUriResourceHeader(cidadeModel.getId());
-			
+
 			return cidadeModel;
-			
+
 		} catch (EstadoNaoEncontradaException e) {
 
 			throw new NegocioException(e.getMessage(), e);
@@ -115,10 +84,8 @@ public class CidadeController {
 	@ApiOperation("Atualiza uma cidade por Id")
 	@PutMapping("/{cidadeId}")
 	public CidadeModel atualizar(
-			@ApiParam(name ="Corpo", value = "Atualização de uma cidade")
-			@PathVariable Long cidadeId, 
-			@ApiParam(value = "Id de uma cidade", example = "1")  
-			@RequestBody @Valid CidadeInput cidadeInput) {
+			@ApiParam(name = "Corpo", value = "Atualização de uma cidade") @PathVariable Long cidadeId,
+			@ApiParam(value = "Id de uma cidade", example = "1") @RequestBody @Valid CidadeInput cidadeInput) {
 
 		try {
 			Cidade cidadeAtual = cadastroCidade.buscar(cidadeId);
