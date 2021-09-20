@@ -1,8 +1,11 @@
 package com.artificer.algafood.api.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +31,10 @@ public class RestauranteUsuarioController {
 	private UsuarioModelConverter modelConverter;
 
 	@GetMapping
-	public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
+	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestaurante.buscar(restauranteId);
-		return modelConverter.toColletionModel(restaurante.getUsuarios());
+		return modelConverter.toCollectionModel(restaurante.getUsuarios()).removeLinks()
+				.add(linkTo(methodOn(RestauranteUsuarioController.class).listar(restauranteId)).withSelfRel());
 	}
 
 	@PutMapping("/{usuarioId}")
