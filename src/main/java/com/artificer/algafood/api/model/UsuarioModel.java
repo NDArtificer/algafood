@@ -6,7 +6,7 @@ import org.springframework.hateoas.server.core.Relation;
 import lombok.Getter;
 import lombok.Setter;
 
-@Relation(collectionRelation = "usuarios")
+@Relation(collectionRelation = "Usuarios")
 @Getter
 @Setter
 public class UsuarioModel extends RepresentationModel<UsuarioModel> {

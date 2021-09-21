@@ -1,15 +1,15 @@
 package com.artificer.algafood.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,25 +50,29 @@ public class PedidosController {
 
 	@Autowired
 	private CadastroPedidoService cadastroPedido;
+	
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pageAssembler;
 
 	@GetMapping
-	private Page<PedidoResumoModel> listar(PedidoFilter filter, @PageableDefault(size = 5) Pageable pageable) {
+	public PagedModel<PedidoResumoModel> listar(PedidoFilter filter, @PageableDefault(size = 5) Pageable pageable) {
+		
 		pageable = convertPage(pageable);
 		
 		Page<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter), pageable);
-		List<PedidoResumoModel> pedidosResumidos = modelResumoConverter.toColletionModel(pedidos.getContent());
-		Page<PedidoResumoModel> pedidosResumidosPages = new PageImpl<>(pedidosResumidos, pageable,
-				pedidos.getTotalElements());
+		PagedModel<PedidoResumoModel> pedidosResumidosPages = pageAssembler.toModel(pedidos, modelResumoConverter) ;
+		
+		
 		return pedidosResumidosPages;
 	}
 
 	@GetMapping("/{codigoPedido}")
-	private PedidoModel buscar(@PathVariable String codigoPedido) {
+	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		return modelConverter.toModel(cadastroPedido.buscar(codigoPedido));
 	}
 
 	@PostMapping
-	private PedidoModel adicionar(@RequestBody @Valid PedidoInput pedidoInput) {
+	public PedidoModel adicionar(@RequestBody @Valid PedidoInput pedidoInput) {
 		try {
 			Pedido pedido = inputConverter.toDomainModel(pedidoInput);
 

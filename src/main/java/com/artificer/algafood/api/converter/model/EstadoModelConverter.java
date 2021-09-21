@@ -1,27 +1,41 @@
 package com.artificer.algafood.api.converter.model;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.artificer.algafood.api.controller.EstadoController;
 import com.artificer.algafood.api.model.EstadoModel;
 import com.artificer.algafood.domain.model.Estado;
 
 @Component
-public class EstadoModelConverter {
+public class EstadoModelConverter extends RepresentationModelAssemblerSupport<Estado, EstadoModel> {
+
+	public EstadoModelConverter() {
+		super(EstadoController.class, EstadoModel.class);
+	}
 
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Override
 	public EstadoModel toModel(Estado estado) {
-		return modelMapper.map(estado, EstadoModel.class);
+		EstadoModel estadoModel = modelMapper.map(estado, EstadoModel.class);
+
+		estadoModel.add(linkTo(methodOn(EstadoController.class).listar()).withRel("estados"));
+		estadoModel.add(linkTo(methodOn(EstadoController.class).buscar(estadoModel.getId())).withSelfRel());
+
+		return estadoModel;
 	}
 
-	public List<EstadoModel> toColletionModel(List<Estado> estados) {
-		return estados.stream().map(estado -> toModel(estado)).collect(Collectors.toList());
+	@Override
+	public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
+		return super.toCollectionModel(entities);
 	}
-	
+
 }

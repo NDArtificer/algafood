@@ -1,27 +1,40 @@
 package com.artificer.algafood.api.converter.model;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.artificer.algafood.api.controller.CozinhaController;
 import com.artificer.algafood.api.model.CozinhaModel;
 import com.artificer.algafood.domain.model.Cozinha;
 
 @Component
-public class CozinhaModelConverter {
+public class CozinhaModelConverter extends RepresentationModelAssemblerSupport<Cozinha, CozinhaModel>{
+
+	public CozinhaModelConverter() {
+		super(CozinhaController.class, CozinhaModel.class);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Override
 	public CozinhaModel toModel(Cozinha cozinha) {
-		return modelMapper.map(cozinha, CozinhaModel.class);
+		CozinhaModel cozinhaModel = modelMapper.map(cozinha, CozinhaModel.class);
+		
+		cozinhaModel.add(linkTo(CozinhaController.class).withSelfRel());
+		
+		return cozinhaModel;
 	}
 
-	public List<CozinhaModel> toColletionModel(List<Cozinha> cozinhas) {
-		return cozinhas.stream().map(cozinha -> toModel(cozinha)).collect(Collectors.toList());
+	@Override
+	public CollectionModel<CozinhaModel> toCollectionModel(Iterable<? extends Cozinha> entities) {
+		return super.toCollectionModel(entities);
 	}
 
 }

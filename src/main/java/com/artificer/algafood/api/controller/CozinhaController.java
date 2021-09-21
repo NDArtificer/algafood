@@ -1,13 +1,12 @@
 package com.artificer.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,15 +42,17 @@ public class CozinhaController {
 	@Autowired
 	private CozinhaInputConverter cozinhaInputConverter;
 
+	@Autowired
+	private PagedResourcesAssembler<Cozinha> pageAssembler;
+	
+	
 	@GetMapping
-	public Page<CozinhaModel> listar(Pageable pageable) {
+	public PagedModel<CozinhaModel> listar(Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
-		List<CozinhaModel> cozinhasModel = cozinhaModelConverter.toColletionModel(cozinhasPage.getContent());
-
-		Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
+		PagedModel<CozinhaModel> cozinhasPaged = pageAssembler.toModel(cozinhasPage, cozinhaModelConverter);
 		
-		return cozinhasModelPage;
+		return cozinhasPaged;
 	}
 
 	@GetMapping("/{cozinhaId}")

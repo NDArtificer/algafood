@@ -1,10 +1,9 @@
 package com.artificer.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,14 +39,14 @@ public class EstadoController {
 	private EstadoInputConverter estadoInputConverter;
 
 	@GetMapping
-	public List<EstadoModel> listar() {
-		
-		return estadoModelConverter.toColletionModel(estadoRepository.findAll());
+	public CollectionModel<EstadoModel> listar() {
+
+		return estadoModelConverter.toCollectionModel(estadoRepository.findAll());
 	}
 
 	@GetMapping("/{estadoId}")
 	public EstadoModel buscar(@PathVariable Long estadoId) {
-		
+
 		return estadoModelConverter.toModel(cadastroEstado.buscar(estadoId));
 
 	}
@@ -55,7 +54,7 @@ public class EstadoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
-		
+
 		Estado estado = estadoInputConverter.toDomainModel(estadoInput);
 		return estadoModelConverter.toModel(cadastroEstado.salvar(estado));
 
