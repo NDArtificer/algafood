@@ -15,8 +15,10 @@ import com.artificer.algafood.api.controller.CidadeController;
 import com.artificer.algafood.api.controller.CozinhaController;
 import com.artificer.algafood.api.controller.EstadoController;
 import com.artificer.algafood.api.controller.FormaPagamentoController;
+import com.artificer.algafood.api.controller.PedidoStatusController;
 import com.artificer.algafood.api.controller.PedidosController;
 import com.artificer.algafood.api.controller.RestauranteController;
+import com.artificer.algafood.api.controller.RestauranteFormasPagamentoController;
 import com.artificer.algafood.api.controller.RestauranteProdutosController;
 import com.artificer.algafood.api.controller.RestauranteUsuarioController;
 import com.artificer.algafood.api.controller.UsuarioController;
@@ -24,13 +26,17 @@ import com.artificer.algafood.api.controller.UsuarioGrupoController;
 
 @Component
 public class ApiLinks {
+	
+	
+	public static final TemplateVariables PROJECTION = new TemplateVariables(
+			new TemplateVariable("projecao", VariableType.REQUEST_PARAM));
 
 	public static final TemplateVariables PAGE_VARIABLES = new TemplateVariables(
 			new TemplateVariable("page", VariableType.REQUEST_PARAM),
 			new TemplateVariable("size", VariableType.REQUEST_PARAM),
 			new TemplateVariable("sort", VariableType.REQUEST_PARAM));
 
-	public Link linkToPedidos() {
+	public Link linkToPedidos(String rel) {
 
 		TemplateVariables filterVariables = new TemplateVariables(
 				new TemplateVariable("clientid", VariableType.REQUEST_PARAM),
@@ -40,8 +46,21 @@ public class ApiLinks {
 
 		String pedidosUrl = linkTo(PedidosController.class).toUri().toString();
 
-		return Link.of(UriTemplate.of(pedidosUrl, PAGE_VARIABLES.concat(filterVariables)), "Pedidos");
+		return Link.of(UriTemplate.of(pedidosUrl, PAGE_VARIABLES.concat(filterVariables)), rel);
 
+	}
+	
+	public Link linkToRestauranteProjection(String rel){
+		var restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
+		return Link.of(UriTemplate.of(restaurantesUrl, PROJECTION), rel);
+	}	
+	public Link linkToCozinha(Long cozinhaId, String rel) {
+	    return linkTo(methodOn(CozinhaController.class)
+	            .buscar(cozinhaId)).withRel(rel);
+	}
+
+	public Link linkToCozinha(Long cozinhaId) {
+	    return linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
 	}
 	
 	
@@ -85,10 +104,32 @@ public class ApiLinks {
 	            .listar(restauranteId)).withRel(rel);
 	}
 
+	public Link linkToActiveRestaurante(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).ativar(restauranteId)).withRel(rel);
+	}
+
+	public Link linkToInactiveRestaurante(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).inativar(restauranteId)).withRel(rel);
+	}
+	
+	public Link linkToOpenRestaurante(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).abrir(restauranteId)).withRel(rel);
+	}
+
+	public Link linkToCloseRestaurante(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).fechar(restauranteId)).withRel(rel);
+	}
+	
 	public Link linkToResponsaveisRestaurante(Long restauranteId) {
 	    return linkToResponsaveisRestaurante(restauranteId, IanaLinkRelations.SELF.value());
 	}
 
+	public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
+	    return linkTo(methodOn(RestauranteFormasPagamentoController.class)
+	            .listar(restauranteId)).withRel(rel);
+	}
+	
+	
 	public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
 	    return linkTo(methodOn(FormaPagamentoController.class)
 	            .buscar(formaPagamentoId)).withRel(rel);
@@ -148,6 +189,25 @@ public class ApiLinks {
 
 	public Link linkToCozinhas() {
 	    return linkToCozinhas(IanaLinkRelations.SELF.value());
+	}
+
+
+	public Link linkToConfirmPedido(String codigoString, String rel) {
+		return linkTo(methodOn(PedidoStatusController.class)
+				.confirmar(codigoString))
+				.withRel(rel);
+	}
+	
+	public Link linkToDeliveryPedido(String codigoString, String rel) {
+		return linkTo(methodOn(PedidoStatusController.class)
+				.entregar(codigoString))
+				.withRel(rel);
+	}
+	
+	public Link linkToCancelPedido(String codigoString, String rel) {
+		return linkTo(methodOn(PedidoStatusController.class)
+				.cancelar(codigoString))
+				.withRel(rel);
 	}
 
 }

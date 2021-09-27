@@ -9,7 +9,9 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -28,9 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.input.RestauranteInputConveter;
 import com.artificer.algafood.api.converter.model.RestauranteModelConverter;
+import com.artificer.algafood.api.converter.model.RestauranteResumoModelConverter;
+import com.artificer.algafood.api.converter.model.RestauranteSummaryModelConverter;
 import com.artificer.algafood.api.model.RestauranteModel;
+import com.artificer.algafood.api.model.RestauranteResumoModel;
+import com.artificer.algafood.api.model.RestauranteSummaryModel;
 import com.artificer.algafood.api.model.input.RestauranteInput;
-import com.artificer.algafood.api.model.views.RestauranteView;
 import com.artificer.algafood.core.validation.ValidationsException;
 import com.artificer.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.artificer.algafood.domain.exception.CozinhaNaoEncontradaException;
@@ -39,14 +44,12 @@ import com.artificer.algafood.domain.exception.RestauranteNaoEncontradoException
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.repository.RestauranteRepository;
 import com.artificer.algafood.domain.service.CadastroRestauranteService;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -62,6 +65,12 @@ public class RestauranteController {
 	private RestauranteModelConverter modelConverter;
 
 	@Autowired
+	private RestauranteSummaryModelConverter summaryModelodelConverter;
+
+	@Autowired
+	private RestauranteResumoModelConverter resumoModelConverter;
+
+	@Autowired
 	private RestauranteInputConveter inputConveter;
 
 	@Autowired
@@ -69,23 +78,18 @@ public class RestauranteController {
 
 	@ApiOperation(value = "Lista Restaurante")
 	@ApiImplicitParams({
-		@ApiImplicitParam(value = "Nome da projeção de pedidos", 
-						  allowableValues = "apenas-nome", 
-						  name = "projecao",
-						  paramType = "query", 
-						  type = "string")	
-			})
+			@ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome", name = "projecao", paramType = "query", type = "string") })
 	@GetMapping
-	@JsonView(RestauranteView.Resumo.class)
-	public List<RestauranteModel> listar() {
-		return modelConverter.toColletionModel(restauranteRepository.findAll());
+	// @JsonView(RestauranteView.Resumo.class)
+	public CollectionModel<RestauranteSummaryModel> listar() {
+		return summaryModelodelConverter.toCollectionModel(restauranteRepository.findAll());
 	}
-	
+
 	@ApiOperation(value = "Lista Restaurante", hidden = true)
-	@JsonView(RestauranteView.Nome.class)
+	// @JsonView(RestauranteView.Nome.class)
 	@GetMapping(params = "projecao=nome")
-	public List<RestauranteModel> listarNome() {
-		return listar();
+	public CollectionModel<RestauranteResumoModel> listarNome() {
+		return resumoModelConverter.toCollectionModel(restauranteRepository.findAll());
 	}
 
 	@GetMapping("/{restauranteId}")
@@ -177,8 +181,10 @@ public class RestauranteController {
 
 	@PutMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
 		cadastroRestaurante.ativar(restauranteId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/ativacoes")
@@ -193,10 +199,11 @@ public class RestauranteController {
 
 	@DeleteMapping("/{restauranteId}/inativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void inativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
 
 		cadastroRestaurante.inativar(restauranteId);
 
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/ativacoes")
@@ -211,14 +218,16 @@ public class RestauranteController {
 
 	@PutMapping("/{restauranteId}/aberto")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void abrir(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		cadastroRestaurante.abrir(restauranteId);
+		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{restauranteId}/fechado")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void fechar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		cadastroRestaurante.fechar(restauranteId);
+		return ResponseEntity.noContent().build();
 	}
 
 }

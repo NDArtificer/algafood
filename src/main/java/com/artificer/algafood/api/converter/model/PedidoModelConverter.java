@@ -6,11 +6,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.TemplateVariable;
-import org.springframework.hateoas.TemplateVariable.VariableType;
-import org.springframework.hateoas.TemplateVariables;
-import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +37,17 @@ public class PedidoModelConverter extends RepresentationModelAssemblerSupport<Pe
 	public PedidoModel toModel(Pedido pedido) {
 		var pedidoModel = modelMapper.map(pedido, PedidoModel.class);
 
-		pedidoModel.add(apiLinks.linkToPedidos());
+		pedidoModel.add(apiLinks.linkToPedidos("Pedidos"));
+
+		if (pedido.canConfirm()) {
+			pedidoModel.add(apiLinks.linkToConfirmPedido(pedidoModel.getCodigo(), "Confirmar"));
+		}
+		if (pedido.canDelivery()) {
+			pedidoModel.add(apiLinks.linkToDeliveryPedido(pedidoModel.getCodigo(), "Entregar"));
+		}
+		if (pedido.canCancel()) {
+			pedidoModel.add(apiLinks.linkToCancelPedido(pedidoModel.getCodigo(), "Cancelar"));
+		}
 		pedidoModel.add(linkTo(methodOn(PedidosController.class).buscar(pedidoModel.getCodigo())).withSelfRel());
 		pedidoModel.getCliente().add(
 				linkTo(methodOn(UsuarioController.class).buscar(pedidoModel.getCliente().getId())).withRel("Usuario"));

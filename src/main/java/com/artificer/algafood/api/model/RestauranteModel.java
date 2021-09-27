@@ -2,6 +2,8 @@ package com.artificer.algafood.api.model;
 
 import java.math.BigDecimal;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.artificer.algafood.api.model.views.RestauranteView;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -10,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RestauranteModel {
+public class RestauranteModel extends RepresentationModel<RestauranteModel>{
 
 	@JsonView({ RestauranteView.Resumo.class, RestauranteView.Nome.class })
 	private Long id;
