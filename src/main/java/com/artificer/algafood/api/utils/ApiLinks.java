@@ -210,4 +210,29 @@ public class ApiLinks {
 				.withRel(rel);
 	}
 
+	public Link linkToRemoveFormaPagamento(Long restauranteId, Long formaPagamentoId, String rel) {
+		return linkTo(methodOn(RestauranteFormasPagamentoController.class)
+				.desassociar(restauranteId, formaPagamentoId))
+				.withRel(rel);
+	}
+
+	
+	public Link linkToAddFormaPagamento(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteFormasPagamentoController.class)
+				.associar(restauranteId, null))
+				.withRel(rel);
+	}
+
+	public Link linkToRestauranteUsuarioRemover(Long restauranteId, Long id, String rel) {
+		return  linkTo(methodOn(RestauranteUsuarioController.class)
+				.desassocioarUsuario(restauranteId, id))
+				.withRel(rel);
+	}
+	
+	public Link linkToRestauranteUsuarioAdd(Long restauranteId, String rel) {
+		return  linkTo(methodOn(RestauranteUsuarioController.class)
+				.desassocioarUsuario(restauranteId, null))
+				.withRel(rel);
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +42,8 @@ public class FormaPagamentoController {
 	private FormaPagamentoInputConverter formaPagamentoInputConverter;
 
 	@GetMapping
-	public List<FormaPagamentoModel> listar() {
-		return formaPagamentoModelConverter.toColletionModel(formaPagamentoRespository.findAll());
+	public CollectionModel<FormaPagamentoModel> listar() {
+		return formaPagamentoModelConverter.toCollectionModel(formaPagamentoRespository.findAll());
 	}
 
 	@GetMapping("/{formaPagamentoId}")
