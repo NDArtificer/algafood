@@ -1,8 +1,7 @@
 package com.artificer.algafood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +27,9 @@ public class UsuarioGrupoController {
 	private GrupoModelConverter modelConverter;
 	
 	@GetMapping
-	public List<GrupoModel> listar(@PathVariable Long usuarioId){
+	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId){
 		Usuario usuario = cadastroUsuario.buscar(usuarioId);
-		return modelConverter.toColletionModel(usuario.getGrupos());
+		return modelConverter.toCollectionModel(usuario.getGrupos());
 	}
 
 	@PutMapping("{grupoId}")

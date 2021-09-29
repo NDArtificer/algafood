@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.artificer.algafood.api.converter.input.ProdutoInputConverter;
 import com.artificer.algafood.api.converter.model.ProdutoModelConverter;
 import com.artificer.algafood.api.model.ProdutoModel;
 import com.artificer.algafood.api.model.input.ProdutoInput;
+import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.domain.model.Produto;
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.repository.ProdutoRepository;
@@ -47,8 +49,11 @@ public class RestauranteProdutosController {
 	@Autowired
 	private ProdutoInputConverter inputConverter;
 
+	@Autowired
+	private ApiLinks apiLinks;
+	
 	@GetMapping
-	public List<ProdutoModel> Listar(@PathVariable Long restauranteId,
+	public CollectionModel<ProdutoModel> Listar(@PathVariable Long restauranteId,
 			@RequestParam(required = false) Boolean inativos) {
 		Restaurante restaurante = cadastroRestaurante.buscar(restauranteId);
 		List<Produto> produtos = new ArrayList<>();
@@ -60,7 +65,7 @@ public class RestauranteProdutosController {
 		} else {
 			produtos = produtoRepository.findAtivosByRestaurante(restaurante);
 		}
-		return modelConverter.toColletionModel(produtos);
+		return modelConverter.toCollectionModel(produtos).add(apiLinks.linkToProduto(restauranteId, "Produtos"));
 	}
 
 	@GetMapping("/{produtoId}")

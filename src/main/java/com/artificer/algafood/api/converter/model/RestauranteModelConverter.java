@@ -29,13 +29,16 @@ public class RestauranteModelConverter extends RepresentationModelAssemblerSuppo
 		RestauranteModel restauranteModel = modelMapper.map(restaurante, RestauranteModel.class);
 
 		restauranteModel.getCozinha().add(apiLinks.linkToCozinha(restaurante.getCozinha().getId()));
-		
+
 		restauranteModel.add(apiLinks.linkToRestauranteProjection("Restaurantes"));
 		restauranteModel.add(apiLinks.linkToRestauranteFormasPagamento(restaurante.getId(), "Forma Pagamento"));
 		restauranteModel.add(apiLinks.linkToResponsaveisRestaurante(restaurante.getId(), "Responsaveis"));
-		restauranteModel.getEndereco().getCidade()
-				.add(apiLinks.linkToCidade(restauranteModel.getEndereco().getCidade().getId()));
 
+		if (restauranteModel.getEndereco() != null 
+				&& restauranteModel.getEndereco().getCidade() != null) {
+			restauranteModel.getEndereco().getCidade()
+					.add(apiLinks.linkToCidade(restauranteModel.getEndereco().getCidade().getId()));
+		}
 		if (restaurante.getAtivo()) {
 			restauranteModel.add(apiLinks.linkToInactiveRestaurante(restaurante.getId(), "Inativar"));
 		} else {

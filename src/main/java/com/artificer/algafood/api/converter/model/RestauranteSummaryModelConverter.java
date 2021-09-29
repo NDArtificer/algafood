@@ -32,6 +32,7 @@ public class RestauranteSummaryModelConverter
 		restauranteSummaryModel.add(apiLinks.linkToRestauranteFormasPagamento(restaurante.getId(), "Forma Pagamento"));
 		restauranteSummaryModel.add(apiLinks.linkToResponsaveisRestaurante(restaurante.getId(), "Responsaveis"));
 		restauranteSummaryModel.getCozinha().add(apiLinks.linkToCozinha(restauranteSummaryModel.getCozinha().getId()));
+		restauranteSummaryModel.add(apiLinks.linkToProduto(restaurante.getId(), "Produtos"));
 
 		if (restaurante.getAtivo()) {
 			restauranteSummaryModel.add(apiLinks.linkToInactiveRestaurante(restaurante.getId(), "Inativar"));

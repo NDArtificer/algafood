@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.artificer.algafood.api.converter.model.ImagemProdutoModelConverter;
 import com.artificer.algafood.api.model.ImagemProdutoModel;
 import com.artificer.algafood.api.model.input.ImagemProdutoInput;
+import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.artificer.algafood.domain.model.FotoProduto;
 import com.artificer.algafood.domain.model.Produto;
@@ -47,6 +48,10 @@ public class RestauranteProdutoImagemController {
 
 	@Autowired
 	private CatalogoImagemProdutoService imagemProdutoService;
+	
+	
+	@Autowired
+	private ApiLinks apiLinks;
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ImagemProdutoModel atualizarImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId,
@@ -62,7 +67,9 @@ public class RestauranteProdutoImagemController {
 		foto.setTamanho(file.getSize());
 		foto.setNomeArquivo(file.getOriginalFilename());
 
-		return modelConverter.toModel(imagemProdutoService.salvar(foto, file.getInputStream()));
+		return modelConverter.toModel(imagemProdutoService.salvar(foto, file.getInputStream()))
+				.add(apiLinks.linkToProduto(restauranteId, produtoId, "Produto"))
+				.add(apiLinks.linkToFotoProduto(restauranteId, produtoId));
 	}
 
 	@DeleteMapping

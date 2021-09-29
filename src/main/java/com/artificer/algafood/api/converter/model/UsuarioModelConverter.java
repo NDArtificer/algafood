@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.artificer.algafood.api.controller.UsuarioController;
 import com.artificer.algafood.api.controller.UsuarioGrupoController;
 import com.artificer.algafood.api.model.UsuarioModel;
-import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.domain.model.Usuario;
 
 @Component
@@ -24,9 +23,6 @@ public class UsuarioModelConverter extends RepresentationModelAssemblerSupport<U
 
 	@Autowired
 	private ModelMapper modelMapper;
-
-	@Autowired 
-	private ApiLinks apiLinks;
 	
 	@Override
 	public UsuarioModel toModel(Usuario usuario) {
