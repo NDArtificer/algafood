@@ -30,6 +30,7 @@ public class GrupoModelConverter extends RepresentationModelAssemblerSupport<Gru
 		grupoModel.add(apiLinks.linkToGrupo(grupo.getId()));
 		grupoModel.add(apiLinks.linkToGrupoPermissoes(grupo.getId(), "Permissoes"));
 		
+		
 		return grupoModel;
 	}
 
