@@ -11,7 +11,6 @@ import org.springframework.hateoas.TemplateVariables;
 import org.springframework.hateoas.UriTemplate;
 import org.springframework.stereotype.Component;
 
-import com.artificer.algafood.api.PermissaoController;
 import com.artificer.algafood.api.controller.CidadeController;
 import com.artificer.algafood.api.controller.CozinhaController;
 import com.artificer.algafood.api.controller.EstadoController;
@@ -21,6 +20,7 @@ import com.artificer.algafood.api.controller.GrupoController;
 import com.artificer.algafood.api.controller.GrupoPermissaoController;
 import com.artificer.algafood.api.controller.PedidoStatusController;
 import com.artificer.algafood.api.controller.PedidosController;
+import com.artificer.algafood.api.controller.PermissaoController;
 import com.artificer.algafood.api.controller.RestauranteController;
 import com.artificer.algafood.api.controller.RestauranteFormasPagamentoController;
 import com.artificer.algafood.api.controller.RestauranteProdutoImagemController;

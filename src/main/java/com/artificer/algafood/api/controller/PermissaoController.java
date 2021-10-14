@@ -1,4 +1,4 @@
-package com.artificer.algafood.api;
+package com.artificer.algafood.api.controller;
 
 import java.util.List;
 

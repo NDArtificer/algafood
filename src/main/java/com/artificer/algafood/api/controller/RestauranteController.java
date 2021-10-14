@@ -206,7 +206,7 @@ public class RestauranteController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/ativacoes")
+	@DeleteMapping("/inativacoes")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativarRestaurantes(@RequestBody List<Long> restauranteIds) {
 		try {

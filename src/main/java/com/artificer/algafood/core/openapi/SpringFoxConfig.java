@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -61,6 +63,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 		            		.build()))
 		            .additionalModels(typeresolver.resolve(Problem.class))
 		            .directModelSubstitute(Pageable.class, PagebleModel.class)
+		            .directModelSubstitute(Links.class, LinksModelOpenApi.class)
 					.tags(new Tag("Cidades", "Gerencia as Cidades"),
 						  new Tag("Grupos", "Gerencia os grupos de usuários"),
 						  new Tag("Cozinhas", "Gerencia as cozinhas"),
