@@ -10,30 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.PermissaoModelConverter;
 import com.artificer.algafood.api.model.PermissaoModel;
-import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.domain.model.Permissao;
 import com.artificer.algafood.domain.repository.PermissaoRepository;
-
 
 @RestController
 @RequestMapping("/permissoes")
 public class PermissaoController {
 
-	
-    @Autowired
-    private PermissaoRepository permissaoRepository;
-    
-    @Autowired
-    private PermissaoModelConverter permissaoModelConverter;
-    
-    @Autowired
-    private ApiLinks apiLinks;
-    
-    @GetMapping
-    public CollectionModel<PermissaoModel> listar() {
-        List<Permissao> todasPermissoes = permissaoRepository.findAll();
-        
-        return permissaoModelConverter.toCollectionModel(todasPermissoes);
-    } 
-	
+	@Autowired
+	private PermissaoRepository permissaoRepository;
+
+	@Autowired
+	private PermissaoModelConverter permissaoModelConverter;
+
+	@GetMapping
+	public CollectionModel<PermissaoModel> listar() {
+		List<Permissao> todasPermissoes = permissaoRepository.findAll();
+
+		return permissaoModelConverter.toCollectionModel(todasPermissoes);
+	}
+
 }
