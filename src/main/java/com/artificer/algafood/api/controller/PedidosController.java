@@ -25,6 +25,7 @@ import com.artificer.algafood.api.model.PedidoResumoModel;
 import com.artificer.algafood.api.model.input.PedidoInput;
 import com.artificer.algafood.core.data.PageWrapper;
 import com.artificer.algafood.core.data.PageableTranslator;
+import com.artificer.algafood.core.security.Security;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Pedido;
 import com.artificer.algafood.domain.model.Usuario;
@@ -54,6 +55,9 @@ public class PedidosController {
 	
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pageAssembler;
+	
+	@Autowired
+	private Security security;
 
 	@GetMapping
 	public PagedModel<PedidoResumoModel> listar(PedidoFilter filter, @PageableDefault(size = 5) Pageable pageable) {
@@ -79,7 +83,7 @@ public class PedidosController {
 			Pedido pedido = inputConverter.toDomainModel(pedidoInput);
 
 			pedido.setCliente(new Usuario());
-			pedido.getCliente().setId(1L);
+			pedido.getCliente().setId(security.getUsurioId());
 			return modelConverter.toModel(cadastroPedido.emitir(pedido));
 
 		} catch (Exception e) {
