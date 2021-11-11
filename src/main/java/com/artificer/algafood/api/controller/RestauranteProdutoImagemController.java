@@ -26,6 +26,7 @@ import com.artificer.algafood.api.converter.model.ImagemProdutoModelConverter;
 import com.artificer.algafood.api.model.ImagemProdutoModel;
 import com.artificer.algafood.api.model.input.ImagemProdutoInput;
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.artificer.algafood.domain.model.FotoProduto;
 import com.artificer.algafood.domain.model.Produto;
@@ -48,11 +49,11 @@ public class RestauranteProdutoImagemController {
 
 	@Autowired
 	private CatalogoImagemProdutoService imagemProdutoService;
-	
-	
+
 	@Autowired
 	private ApiLinks apiLinks;
 
+	@CheckSecurity.Restaurantes.Editable
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ImagemProdutoModel atualizarImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId,
 			@Valid ImagemProdutoInput produtoInput) throws IOException {
@@ -72,12 +73,14 @@ public class RestauranteProdutoImagemController {
 				.add(apiLinks.linkToFotoProduto(restauranteId, produtoId));
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluirImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		imagemProdutoService.excluir(restauranteId, produtoId);
 	}
 
+	@CheckSecurity.Restaurantes.Readable
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ImagemProdutoModel buscarImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 
@@ -98,15 +101,11 @@ public class RestauranteProdutoImagemController {
 
 			FotoRecuperada inputStream = fotoService.recuperar(foto.getNomeArquivo());
 
-
 			if (inputStream.hasUrl()) {
-				return ResponseEntity
-						.status(HttpStatus.FOUND)
-						.header(HttpHeaders.LOCATION, inputStream.getUrl())
+				return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, inputStream.getUrl())
 						.build();
 			} else {
-				return ResponseEntity.ok()
-						.contentType(mediaTypeFoto)
+				return ResponseEntity.ok().contentType(mediaTypeFoto)
 						.body(new InputStreamResource(inputStream.getInputStream()));
 			}
 		} catch (EntidadeNaoEncontradaException e) {

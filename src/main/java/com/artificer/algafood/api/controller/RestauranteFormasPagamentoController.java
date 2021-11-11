@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artificer.algafood.api.converter.model.FormaPagamentoModelConverter;
 import com.artificer.algafood.api.model.FormaPagamentoModel;
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.service.CadastroRestauranteService;
 
@@ -30,21 +31,25 @@ public class RestauranteFormasPagamentoController {
 
 	@Autowired
 	private ApiLinks apiLinks;
-	
+
+	@CheckSecurity.Restaurantes.Readable
 	@GetMapping
 	public CollectionModel<FormaPagamentoModel> listar(@PathVariable Long restauranteId) {
 
 		Restaurante restaurante = cadastroRestaurante.buscar(restauranteId);
-		CollectionModel<FormaPagamentoModel>  formasPagamento =  modelConverter.toCollectionModel(restaurante.getFormasPagamento());
-		
-		formasPagamento.getContent().forEach(formaPagamento ->{
-			Long formaPagamentoId = formaPagamento.getId(); 
-			formaPagamento.add(apiLinks.linkToRemoveFormaPagamento(restauranteId, formaPagamentoId, "Forma Pagamento Remover"));
+		CollectionModel<FormaPagamentoModel> formasPagamento = modelConverter
+				.toCollectionModel(restaurante.getFormasPagamento());
+
+		formasPagamento.getContent().forEach(formaPagamento -> {
+			Long formaPagamentoId = formaPagamento.getId();
+			formaPagamento.add(
+					apiLinks.linkToRemoveFormaPagamento(restauranteId, formaPagamentoId, "Forma Pagamento Remover"));
 		});
-		
+
 		return formasPagamento.add(apiLinks.linkToAddFormaPagamento(restauranteId, "Forma Pagamento Add"));
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
@@ -52,6 +57,7 @@ public class RestauranteFormasPagamentoController {
 		return ResponseEntity.accepted().build();
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {

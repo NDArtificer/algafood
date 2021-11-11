@@ -36,6 +36,7 @@ import com.artificer.algafood.api.model.RestauranteModel;
 import com.artificer.algafood.api.model.RestauranteResumoModel;
 import com.artificer.algafood.api.model.RestauranteSummaryModel;
 import com.artificer.algafood.api.model.input.RestauranteInput;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.core.validation.ValidationsException;
 import com.artificer.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.artificer.algafood.domain.exception.CozinhaNaoEncontradaException;
@@ -76,6 +77,7 @@ public class RestauranteController {
 	@Autowired
 	private SmartValidator validator;
 
+	@CheckSecurity.Restaurantes.Readable
 	@ApiOperation(value = "Lista Restaurante")
 	@ApiImplicitParams({
 			@ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome", name = "projecao", paramType = "query", type = "string") })
@@ -85,6 +87,7 @@ public class RestauranteController {
 		return summaryModelodelConverter.toCollectionModel(restauranteRepository.findAll());
 	}
 
+	@CheckSecurity.Restaurantes.Readable
 	@ApiOperation(value = "Lista Restaurante", hidden = true)
 	// @JsonView(RestauranteView.Nome.class)
 	@GetMapping(params = "projecao=nome")
@@ -92,6 +95,7 @@ public class RestauranteController {
 		return resumoModelConverter.toCollectionModel(restauranteRepository.findAll());
 	}
 
+	@CheckSecurity.Restaurantes.Readable
 	@GetMapping("/{restauranteId}")
 	public RestauranteModel buscar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestaurante.buscar(restauranteId);
@@ -100,6 +104,7 @@ public class RestauranteController {
 
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
@@ -113,6 +118,7 @@ public class RestauranteController {
 		}
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/{restauranteId}")
 	public RestauranteModel atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteInput restauranteInput) {
@@ -130,6 +136,7 @@ public class RestauranteController {
 
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PatchMapping("/{restauranteId}")
 	public RestauranteModel atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos,
 			HttpServletRequest request) {
@@ -179,6 +186,7 @@ public class RestauranteController {
 		}
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
@@ -187,6 +195,7 @@ public class RestauranteController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/ativacoes")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void ativarRestaurantes(@RequestBody List<Long> restauranteIds) {

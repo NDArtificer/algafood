@@ -2,6 +2,7 @@ package com.artificer.algafood.api.controller;
 
 import javax.validation.Valid;
 
+import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import com.artificer.algafood.api.converter.input.CozinhaInputConverter;
 import com.artificer.algafood.api.converter.model.CozinhaModelConverter;
 import com.artificer.algafood.api.model.CozinhaModel;
 import com.artificer.algafood.api.model.input.CozinhaInput;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Cozinha;
 import com.artificer.algafood.domain.repository.CozinhaRepository;
 import com.artificer.algafood.domain.service.CadastroCozinhaService;
@@ -46,7 +48,7 @@ public class CozinhaController {
 	@Autowired
 	private PagedResourcesAssembler<Cozinha> pageAssembler;
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.Readable
 	@GetMapping
 	public PagedModel<CozinhaModel> listar(Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
@@ -56,14 +58,14 @@ public class CozinhaController {
 		return cozinhasPaged;
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.Readable
 	@GetMapping("/{cozinhaId}")
 	public CozinhaModel buscar(@PathVariable Long cozinhaId) {
 		return cozinhaModelConverter.toModel(cadastoCozinha.buscar(cozinhaId));
 
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.Editable
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
@@ -71,7 +73,7 @@ public class CozinhaController {
 		return cozinhaModelConverter.toModel(cadastoCozinha.salvar(cozinha));
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.Editable
 	@PutMapping("/{cozinhaId}")
 	public CozinhaModel atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 
@@ -82,7 +84,7 @@ public class CozinhaController {
 
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.Editable
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId) {

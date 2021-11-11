@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artificer.algafood.api.converter.model.UsuarioModelConverter;
 import com.artificer.algafood.api.model.UsuarioModel;
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.service.CadastroRestauranteService;
 
@@ -33,28 +34,32 @@ public class RestauranteUsuarioController {
 
 	@Autowired
 	private ApiLinks apiLinks;
-	
-	
+
+	@CheckSecurity.Restaurantes.Readable
 	@GetMapping
 	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestaurante.buscar(restauranteId);
-		CollectionModel<UsuarioModel> usuariosModel =modelConverter.toCollectionModel(restaurante.getUsuarios()).removeLinks()
+		CollectionModel<UsuarioModel> usuariosModel = modelConverter.toCollectionModel(restaurante.getUsuarios())
+				.removeLinks()
 				.add(linkTo(methodOn(RestauranteUsuarioController.class).listar(restauranteId)).withSelfRel());
-		 usuariosModel.getContent().forEach(usuarioModel ->{
-			 usuarioModel.add(apiLinks.linkToRestauranteUsuarioRemover(restauranteId, usuarioModel.getId() , "Remover Usuario"));	 
-			 });
-		 
-		 return usuariosModel.add(apiLinks.linkToRestauranteUsuarioAdd(restauranteId, "Add Usuario"));
+		usuariosModel.getContent().forEach(usuarioModel -> {
+			usuarioModel.add(
+					apiLinks.linkToRestauranteUsuarioRemover(restauranteId, usuarioModel.getId(), "Remover Usuario"));
+		});
+
+		return usuariosModel.add(apiLinks.linkToRestauranteUsuarioAdd(restauranteId, "Add Usuario"));
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associoarUsuario(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
 		cadastroRestaurante.associarUsuario(restauranteId, usuarioId);
-		
+
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Restaurantes.Editable
 	@DeleteMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> desassocioarUsuario(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
