@@ -225,6 +225,7 @@ public class RestauranteController {
 		}
 	}
 
+	@CheckSecurity.Restaurantes.manageable
 	@PutMapping("/{restauranteId}/aberto")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
@@ -232,6 +233,7 @@ public class RestauranteController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Restaurantes.manageable
 	@PutMapping("/{restauranteId}/fechado")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {

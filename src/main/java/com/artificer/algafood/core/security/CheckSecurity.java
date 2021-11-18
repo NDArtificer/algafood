@@ -25,13 +25,19 @@ public @interface CheckSecurity {
 		}
 
 	}
-	
+
 	public @interface Restaurantes {
-		
+
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface Editable {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_RESTAURANTES') or @security.manageRestaurante(#restauranteId))")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface manageable {
 		}
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
@@ -39,8 +45,7 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		public @interface Readable {
 		}
-		
+
 	}
-	
 
 }
