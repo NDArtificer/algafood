@@ -25,6 +25,7 @@ import com.artificer.algafood.api.model.PedidoResumoModel;
 import com.artificer.algafood.api.model.input.PedidoInput;
 import com.artificer.algafood.core.data.PageWrapper;
 import com.artificer.algafood.core.data.PageableTranslator;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.core.security.Security;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Pedido;
@@ -72,6 +73,7 @@ public class PedidosController {
 		return pedidosResumidosPages;
 	}
 
+	@CheckSecurity.Pedidos.Consultable
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		return modelConverter.toModel(cadastroPedido.buscar(codigoPedido));

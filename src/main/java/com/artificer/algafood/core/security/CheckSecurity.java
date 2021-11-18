@@ -6,6 +6,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public @interface CheckSecurity {
@@ -34,7 +35,9 @@ public @interface CheckSecurity {
 		public @interface Editable {
 		}
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_RESTAURANTES') or @security.manageRestaurante(#restauranteId))")
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') "
+				+ "and (hasAuthority('EDITAR_RESTAURANTES') "
+				+ "or @security.manageRestaurante(#restauranteId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface manageable {
@@ -47,5 +50,26 @@ public @interface CheckSecurity {
 		}
 
 	}
+	
+	public @interface Pedidos {
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface Readable {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') "
+				+ "or @security.getUsurioId() == returnObject.cliente.id "
+				+ "or @security.manageRestaurante(returnObject.restaurante.id)")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface Consultable {
+			
+		}
+		
+	}
+	
 
 }
