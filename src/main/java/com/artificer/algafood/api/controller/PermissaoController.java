@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.PermissaoModelConverter;
 import com.artificer.algafood.api.model.PermissaoModel;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Permissao;
 import com.artificer.algafood.domain.repository.PermissaoRepository;
 
@@ -23,6 +24,7 @@ public class PermissaoController {
 	@Autowired
 	private PermissaoModelConverter permissaoModelConverter;
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Readable
 	@GetMapping
 	public CollectionModel<PermissaoModel> listar() {
 		List<Permissao> todasPermissoes = permissaoRepository.findAll();

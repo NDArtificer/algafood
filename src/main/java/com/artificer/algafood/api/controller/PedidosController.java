@@ -60,6 +60,7 @@ public class PedidosController {
 	@Autowired
 	private Security security;
 
+	@CheckSecurity.Pedidos.Searchble
 	@GetMapping
 	public PagedModel<PedidoResumoModel> listar(PedidoFilter filter, @PageableDefault(size = 5) Pageable pageable) {
 		
@@ -73,12 +74,14 @@ public class PedidosController {
 		return pedidosResumidosPages;
 	}
 
+	
 	@CheckSecurity.Pedidos.Consultable
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		return modelConverter.toModel(cadastroPedido.buscar(codigoPedido));
 	}
 
+	@CheckSecurity.Pedidos.Creatable
 	@PostMapping
 	public PedidoModel adicionar(@RequestBody @Valid PedidoInput pedidoInput) {
 		try {

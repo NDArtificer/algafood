@@ -20,6 +20,7 @@ import com.artificer.algafood.api.converter.model.CidadeModelConverter;
 import com.artificer.algafood.api.model.CidadeModel;
 import com.artificer.algafood.api.model.input.CidadeInput;
 import com.artificer.algafood.api.utils.ResourceUriHelper;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Cidade;
@@ -47,12 +48,14 @@ public class CidadeController {
 	@Autowired
 	private CidadeInputConverter cidadeInputConverter;
 
+	@CheckSecurity.Cidades.Editble
 	@ApiOperation("Lista as cidades")
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
 		return cidadeModelConverter.toCollectionModel(cidadeRepository.findAll());
 	}
 
+	@CheckSecurity.Cidades.Editble
 	@ApiOperation("Busca uma cidade por Id")
 	@GetMapping("/{cidadeId}")
 	public CidadeModel buscar(@ApiParam(value = "Id de uma cidade", example = "1") @PathVariable Long cidadeId) {
@@ -62,6 +65,7 @@ public class CidadeController {
 
 	}
 
+	@CheckSecurity.Cidades.Editble
 	@ApiOperation("Cadastra uma cidade")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -81,6 +85,7 @@ public class CidadeController {
 
 	}
 
+	@CheckSecurity.Cidades.Editble
 	@ApiOperation("Atualiza uma cidade por Id")
 	@PutMapping("/{cidadeId}")
 	public CidadeModel atualizar(
@@ -99,6 +104,7 @@ public class CidadeController {
 		}
 	}
 
+	@CheckSecurity.Cidades.Editble
 	@ApiOperation("Remove uma cidade por Id")
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

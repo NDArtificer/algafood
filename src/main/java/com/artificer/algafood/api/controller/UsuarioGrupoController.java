@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artificer.algafood.api.converter.model.GrupoModelConverter;
 import com.artificer.algafood.api.model.GrupoModel;
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.service.CadastroUsuarioService;
 
@@ -31,6 +32,7 @@ public class UsuarioGrupoController {
 	@Autowired
 	private ApiLinks apiLinks;
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Readable
 	@GetMapping
 	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
 		Usuario usuario = cadastroUsuario.buscar(usuarioId);
@@ -43,6 +45,7 @@ public class UsuarioGrupoController {
 		return gruposModel;
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@PutMapping("{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
@@ -51,6 +54,7 @@ public class UsuarioGrupoController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@DeleteMapping("{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {

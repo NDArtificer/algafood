@@ -20,6 +20,7 @@ import com.artificer.algafood.api.model.UsuarioModel;
 import com.artificer.algafood.api.model.input.SenhaInput;
 import com.artificer.algafood.api.model.input.UsuarioComSenhaInput;
 import com.artificer.algafood.api.model.input.UsuarioInput;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.repository.UsuarioRepository;
 import com.artificer.algafood.domain.service.CadastroUsuarioService;
@@ -45,12 +46,14 @@ public class UsuarioController {
 		return modelConverter.toCollectionModel(usuarioRepository.findAll());
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Readable
 	@GetMapping("/{usuarioId}")
 	public UsuarioModel buscar(@PathVariable Long usuarioId) {
 		Usuario usuario = usuarioService.buscar(usuarioId);
 		return modelConverter.toModel(usuario);
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
@@ -59,6 +62,7 @@ public class UsuarioController {
 
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.userEditble
 	@PutMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
@@ -68,6 +72,7 @@ public class UsuarioController {
 
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.passwordEditble
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {

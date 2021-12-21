@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,7 @@ import com.artificer.algafood.api.converter.input.FormaPagamentoInputConverter;
 import com.artificer.algafood.api.converter.model.FormaPagamentoModelConverter;
 import com.artificer.algafood.api.model.FormaPagamentoModel;
 import com.artificer.algafood.api.model.input.FormaPagamentoInput;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.FormaPagamento;
 import com.artificer.algafood.domain.repository.FormaPagamentoRepository;
 import com.artificer.algafood.domain.service.CadastroFormaPagamentoService;
@@ -40,19 +40,19 @@ public class FormaPagamentoController {
 	@Autowired
 	private FormaPagamentoInputConverter formaPagamentoInputConverter;
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.FormasPagamento.Readable
 	@GetMapping
 	public CollectionModel<FormaPagamentoModel> listar() {
 		return formaPagamentoModelConverter.toCollectionModel(formaPagamentoRespository.findAll());
 	}
 
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.FormasPagamento.Readable
 	@GetMapping("/{formaPagamentoId}")
 	public FormaPagamentoModel buscar(@PathVariable Long formaPagamentoId) {
 		return formaPagamentoModelConverter.toModel(cadastroPagamento.buscar(formaPagamentoId));
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_FORMAS_PAGAMENTO')")
+	@CheckSecurity.FormasPagamento.Editble
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -62,7 +62,7 @@ public class FormaPagamentoController {
 
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_FORMAS_PAGAMENTO')")
+	@CheckSecurity.FormasPagamento.Editble
 	@PutMapping("/{formaPagamentoId}")
 	public FormaPagamentoModel atualizar(@PathVariable Long formaPagamentoId,
 			@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -72,7 +72,7 @@ public class FormaPagamentoController {
 
 	}
 
-	@PreAuthorize("hasAuthority('EDITAR_FORMAS_PAGAMENTO')")
+	@CheckSecurity.FormasPagamento.Editble
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long formaPagamentoId) {

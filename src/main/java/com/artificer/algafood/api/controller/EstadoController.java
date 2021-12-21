@@ -19,6 +19,7 @@ import com.artificer.algafood.api.converter.input.EstadoInputConverter;
 import com.artificer.algafood.api.converter.model.EstadoModelConverter;
 import com.artificer.algafood.api.model.EstadoModel;
 import com.artificer.algafood.api.model.input.EstadoInput;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Estado;
 import com.artificer.algafood.domain.repository.EstadoRepository;
 import com.artificer.algafood.domain.service.CadastroEstadoService;
@@ -44,6 +45,7 @@ public class EstadoController {
 		return estadoModelConverter.toCollectionModel(estadoRepository.findAll());
 	}
 
+	@CheckSecurity.Estados.Readable
 	@GetMapping("/{estadoId}")
 	public EstadoModel buscar(@PathVariable Long estadoId) {
 
@@ -51,6 +53,7 @@ public class EstadoController {
 
 	}
 
+	@CheckSecurity.Estados.Editble
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
@@ -60,6 +63,7 @@ public class EstadoController {
 
 	}
 
+	@CheckSecurity.Estados.Editble
 	@PutMapping("/{estadoId}")
 	public EstadoModel atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
 
@@ -70,6 +74,7 @@ public class EstadoController {
 
 	}
 
+	@CheckSecurity.Estados.Editble
 	@DeleteMapping("/{estadoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long estadoId) {

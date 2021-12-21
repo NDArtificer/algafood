@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artificer.algafood.api.converter.model.PermissaoModelConverter;
 import com.artificer.algafood.api.model.PermissaoModel;
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.service.CadastroGrupoService;
 
 @RestController
@@ -29,32 +30,35 @@ public class GrupoPermissaoController {
 
 	@Autowired
 	private ApiLinks apiLinks;
-	
+
+	@CheckSecurity.UsuariosGrupoPermissoes.Readable
 	@GetMapping
 	public CollectionModel<PermissaoModel> listar(@PathVariable Long grupoId) {
 		var grupo = cadastroGrupo.buscar(grupoId);
 		CollectionModel<PermissaoModel> permissoesModel = modelConverter.toCollectionModel(grupo.getPermissoes());
-		
+
 		permissoesModel.getContent().forEach(permissaoModel -> {
-			permissaoModel.add(apiLinks.linkToRemoveGrupoPermissoes(grupoId, permissaoModel.getId(),"Remove"));
+			permissaoModel.add(apiLinks.linkToRemoveGrupoPermissoes(grupoId, permissaoModel.getId(), "Remove"));
 		});
-		
+
 		return permissoesModel.add(apiLinks.linkToAddGrupoPermissoes(grupoId, "Add"));
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@PutMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		cadastroGrupo.associarPermissao(grupoId, permissaoId);
-		
+
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@DeleteMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		cadastroGrupo.desassociarPermissao(grupoId, permissaoId);
-		
+
 		return ResponseEntity.noContent().build();
 	}
 

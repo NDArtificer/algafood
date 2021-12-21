@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.service.AlteracaoPedidoService;
 
 @RestController
@@ -18,6 +19,7 @@ public class PedidoStatusController {
 	@Autowired
 	private AlteracaoPedidoService alteracaoService;
 
+	@CheckSecurity.Pedidos.Manageable
 	@PutMapping("/confirmacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> confirmar(@PathVariable String codigoPedido) {
@@ -26,6 +28,7 @@ public class PedidoStatusController {
 
 	}
 
+	@CheckSecurity.Pedidos.Manageable
 	@PutMapping("/cancelamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> cancelar(@PathVariable String codigoPedido) {
@@ -33,6 +36,7 @@ public class PedidoStatusController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Pedidos.Manageable
 	@PutMapping("/entrega")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> entregar(@PathVariable String codigoPedido) {

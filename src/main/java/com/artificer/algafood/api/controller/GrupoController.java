@@ -19,6 +19,7 @@ import com.artificer.algafood.api.converter.input.GrupoInputConverter;
 import com.artificer.algafood.api.converter.model.GrupoModelConverter;
 import com.artificer.algafood.api.model.GrupoModel;
 import com.artificer.algafood.api.model.input.GrupoInput;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Grupo;
 import com.artificer.algafood.domain.repository.GrupoRepository;
 import com.artificer.algafood.domain.service.CadastroGrupoService;
@@ -39,16 +40,19 @@ public class GrupoController {
 	@Autowired
 	private GrupoInputConverter inputConverter;
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Readable
 	@GetMapping
 	public CollectionModel<GrupoModel> listar() {
 		return modelConverter.toCollectionModel(grupoRepository.findAll());
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Readable
 	@GetMapping("/{grupoId}")
 	public GrupoModel buscar(@PathVariable Long grupoId) {
 		return modelConverter.toModel(grupoService.buscar(grupoId));
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	private GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
@@ -56,6 +60,7 @@ public class GrupoController {
 		return modelConverter.toModel(grupoService.salvar(grupo));
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@PutMapping("/{grupoId}")
 	public GrupoModel atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
 		Grupo grupoAtual = grupoService.buscar(grupoId);
@@ -64,6 +69,7 @@ public class GrupoController {
 		return modelConverter.toModel(grupoService.salvar(grupoAtual));
 	}
 
+	@CheckSecurity.UsuariosGrupoPermissoes.Editble
 	@DeleteMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long grupoId) {

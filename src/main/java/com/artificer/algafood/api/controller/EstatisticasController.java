@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.statistic.VendasDiaria;
 import com.artificer.algafood.domain.repository.filter.VendaDiariaFilter;
 import com.artificer.algafood.domain.service.VendasQueriesServices;
@@ -27,25 +28,28 @@ public class EstatisticasController {
 
 	@Autowired
 	private VendasReportService reportservice;
-	
+
 	@Autowired
 	private ApiLinks apiLinks;
 
+	@CheckSecurity.Estatisticas.Readable
 	@GetMapping
 	public EstatisticaModel estatistica() {
 		var estatisticaModel = new EstatisticaModel();
-		
+
 		estatisticaModel.add(apiLinks.linkToVendasDiarias("Vendas-Diarias"));
-		
+
 		return estatisticaModel;
 	}
 
+	@CheckSecurity.Estatisticas.Readable
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<VendasDiaria> consultarVendasDiarias(VendaDiariaFilter filter,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
 		return vendaService.consultarVendasDiarias(filter, timeOffSet);
 	}
 
+	@CheckSecurity.Estatisticas.Readable
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filter,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
