@@ -17,6 +17,7 @@ import com.artificer.algafood.api.controller.RestauranteProdutosController;
 import com.artificer.algafood.api.controller.UsuarioController;
 import com.artificer.algafood.api.model.PedidoModel;
 import com.artificer.algafood.api.utils.ApiLinks;
+import com.artificer.algafood.core.security.Security;
 import com.artificer.algafood.domain.model.Pedido;
 
 @Component
@@ -33,21 +34,27 @@ public class PedidoModelConverter extends RepresentationModelAssemblerSupport<Pe
 	@Autowired
 	private ApiLinks apiLinks;
 
+	@Autowired
+	private Security security;
+
 	@Override
 	public PedidoModel toModel(Pedido pedido) {
 		var pedidoModel = modelMapper.map(pedido, PedidoModel.class);
 
 		pedidoModel.add(apiLinks.linkToPedidos("Pedidos"));
 
-		if (pedido.canConfirm()) {
-			pedidoModel.add(apiLinks.linkToConfirmPedido(pedidoModel.getCodigo(), "Confirmar"));
+		if (security.isPedidoManegeable(pedido.getCodigo())) {
+			if (pedido.canConfirm()) {
+				pedidoModel.add(apiLinks.linkToConfirmPedido(pedidoModel.getCodigo(), "Confirmar"));
+			}
+			if (pedido.canDelivery()) {
+				pedidoModel.add(apiLinks.linkToDeliveryPedido(pedidoModel.getCodigo(), "Entregar"));
+			}
+			if (pedido.canCancel()) {
+				pedidoModel.add(apiLinks.linkToCancelPedido(pedidoModel.getCodigo(), "Cancelar"));
+			}
 		}
-		if (pedido.canDelivery()) {
-			pedidoModel.add(apiLinks.linkToDeliveryPedido(pedidoModel.getCodigo(), "Entregar"));
-		}
-		if (pedido.canCancel()) {
-			pedidoModel.add(apiLinks.linkToCancelPedido(pedidoModel.getCodigo(), "Cancelar"));
-		}
+
 		pedidoModel.add(linkTo(methodOn(PedidosController.class).buscar(pedidoModel.getCodigo())).withSelfRel());
 		pedidoModel.getCliente().add(
 				linkTo(methodOn(UsuarioController.class).buscar(pedidoModel.getCliente().getId())).withRel("Usuario"));

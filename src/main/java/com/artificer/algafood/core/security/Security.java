@@ -35,8 +35,21 @@ public class Security {
 		return restauranteRepository.existsUsuario(restauranteId, getUsurioId());
 	}
 
+	public boolean usuarioAuthenticatedEquals(Long usuarioId) {
+		return getUsurioId() != null && usuarioId != null && getUsurioId().equals(usuarioId);
+	}
+
 	public boolean manageRestaurantePedido(String codigoPedido) {
 		return pedidoRepository.isPedidoManegeableBy(codigoPedido, getUsurioId());
 	}
 
+	public boolean isPedidoManegeable(String codigoPedido) {
+		return hasAuthority("SCOPE_WRITE")
+				&& (hasAuthority("GERENCIAR_PEDIDOS") || manageRestaurantePedido(codigoPedido));
+	}
+
+	public boolean hasAuthority(String authorityName) {
+		return getAuthentication().getAuthorities().stream()
+				.anyMatch(auth -> auth.getAuthority().equals(authorityName));
+	}
 }

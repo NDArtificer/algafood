@@ -59,7 +59,8 @@ public @interface CheckSecurity {
 		}
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
-		@PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') " + "or @security.getUsurioId() == returnObject.cliente.id "
+		@PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') "
+				+ "or @security.usuarioAuthenticatedEquals(returnObject.cliente.id) "
 				+ "or @security.manageRestaurante(returnObject.restaurante.id)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
@@ -68,7 +69,7 @@ public @interface CheckSecurity {
 		}
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
-				+ "@security.getUsurioId() == #filter.clienteId or"
+				+ "@security.usuarioAuthenticatedEquals(#filter.clienteId) or"
 				+ "@security.manageRestaurante(#filter.restauranteId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
@@ -146,7 +147,7 @@ public @interface CheckSecurity {
 
 	public @interface UsuariosGrupoPermissoes {
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and @security.getUsurioId() == #usuarioId")
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and @security.usuarioAuthenticatedEquals(#usuarioId)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface passwordEditble {
