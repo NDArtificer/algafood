@@ -1,0 +1,26 @@
+version: "3.9"
+networks:
+   algafood-network:
+      driver: bridge
+services:
+   algafood-mysql:
+      image: mysql:8.0
+      environment:
+        MYSQL_ROOT_PASSWORD: '7896354210'
+      ports:
+         - "3306:3306"
+      networks:
+         - algafood-network
+   algafood-api:
+      image: algafood-api
+      command: ["/wait-for-it.sh", "-t 45","--strict" , "algafood-mysql:3306", "--", "java", "-jar", "api.jar"]
+      environment:
+         DB_HOST: algafood-mysql
+         S3-ID-KEY-ACCESS: 
+         S3-ID-SECRET-KEY-ACCESS: 
+      ports:
+         - "8080:8080"
+      networks:
+         - algafood-network
+      depends_on:
+         - algafood-mysql
