@@ -1,6 +1,5 @@
 package com.artificer.algafood.core.security;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -17,8 +16,7 @@ public class CorsConfig {
 	@Bean
 	public FilterRegistrationBean<CorsFilter> corFilterRegistrationBean(){
 		CorsConfiguration corsConfig = new CorsConfiguration();
-		corsConfig.setAllowCredentials(true);
-		corsConfig.setAllowedOrigins(Collections.singletonList("*"));
+		corsConfig.setAllowedOriginPatterns(Collections.singletonList("*"));
 		corsConfig.setAllowedMethods(Collections.singletonList("*"));;
 		corsConfig.setAllowedHeaders(Collections.singletonList("*"));;
 		

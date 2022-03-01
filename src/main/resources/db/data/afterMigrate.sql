@@ -1,5 +1,8 @@
 set foreign_key_checks = 0;
 
+lock tables cidade write, cozinha write, estado write, restaurante write, forma_pagamento write, produto write, permissao write, grupo write,
+           grupo_permissao write, restaurante_forma_pagamento write, usuario write, usuario_grupo write, restaurante_usuario_responsavel write, pedido write, item_pedido write, foto_produto write, oauth_client_details write;
+
 delete from cidade;
 delete from cozinha;
 delete from estado;
@@ -206,3 +209,4 @@ insert into oauth_client_details (client_id, resource_ids, client_secret,
 	access_token_validity, refresh_token_validity, autoapprove)
 values ('faturamento', null, '$2a$12$MiX05veVCwEMFaxG5t7OZuOpYVSzTApRbF4L2Og7cpvIf6ea6Ttoi', 'READ,WRITE', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS', null, null, null );
 
+unlock tables;

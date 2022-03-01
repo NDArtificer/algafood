@@ -1,0 +1,1 @@
+RENAME TABLE oatuh_code TO oauth_code
