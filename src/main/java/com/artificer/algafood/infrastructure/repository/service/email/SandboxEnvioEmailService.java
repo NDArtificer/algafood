@@ -9,11 +9,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import com.artificer.algafood.core.email.EmailProperties;
 import com.artificer.algafood.core.email.EmailSandboxProperties;
 
-import freemarker.template.Configuration;
+public class SandboxEnvioEmailService extends SmtpEnvioEmailService {
 
-public class SandboxEnvioEmailService extends SmtpEnvioEmailService{
-	
-	
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -22,15 +19,15 @@ public class SandboxEnvioEmailService extends SmtpEnvioEmailService{
 
 	@Autowired
 	private EmailSandboxProperties sandboxProperties;
-	
+
 	@Autowired
-	private Configuration config;
-	
+	private EmailTemplateProcessor templateProcessor;
+
 	@Override
 	public void enviar(Message message) {
 
 		try {
-			String body = processarTemplate(message);
+			String body = templateProcessor.processarTemplate(message);
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
 			MimeMessageHelper mimeHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
 
@@ -43,7 +40,7 @@ public class SandboxEnvioEmailService extends SmtpEnvioEmailService{
 		} catch (Exception e) {
 			throw new EmailException("Não foi possível enviar o e-mail!", e);
 		}
-		
+
 	}
 
 }

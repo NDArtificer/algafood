@@ -34,6 +34,7 @@ services:
       SPRING_REDIS_HOST: algafood-redis
       S3-ID-KEY-ACCESS: AKIA2BF22HIJK4IESY7AAKIA2BF22HIJK4IESY7A
       S3-ID-SECRET-KEY-ACCESS: 45RqqRbBqrl8ugjM39Kpt9lT788MpPrIS/rOmq5d
+      SPRING_PROFILES_ACTIVE: development
     networks:
     - algafood-network
     depends_on:
