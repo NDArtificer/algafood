@@ -1,4 +1,4 @@
-package com.artificer.algafood.core.openapi;
+package com.artificer.algafood.core.springdoc;
 
 import java.util.List;
 

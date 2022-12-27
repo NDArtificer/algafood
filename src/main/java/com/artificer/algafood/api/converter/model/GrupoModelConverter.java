@@ -14,23 +14,23 @@ import com.artificer.algafood.domain.model.Grupo;
 @Component
 public class GrupoModelConverter extends RepresentationModelAssemblerSupport<Grupo, GrupoModel> {
 
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private ApiLinks apiLinks;
+
 	public GrupoModelConverter() {
 		super(GrupoController.class, GrupoModel.class);
 	}
 
-	@Autowired
-	private ModelMapper modelMapper;
-	
-	@Autowired
-	private ApiLinks apiLinks;
 	@Override
 	public GrupoModel toModel(Grupo grupo) {
 		GrupoModel grupoModel = modelMapper.map(grupo, GrupoModel.class);
-		
+
 		grupoModel.add(apiLinks.linkToGrupo(grupo.getId()));
 		grupoModel.add(apiLinks.linkToGrupoPermissoes(grupo.getId(), "Permissoes"));
-		
-		
+
 		return grupoModel;
 	}
 
@@ -38,5 +38,5 @@ public class GrupoModelConverter extends RepresentationModelAssemblerSupport<Gru
 	public CollectionModel<GrupoModel> toCollectionModel(Iterable<? extends Grupo> entities) {
 		return super.toCollectionModel(entities);
 	}
-	
+
 }

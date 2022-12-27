@@ -16,24 +16,22 @@ import com.artificer.algafood.domain.model.Cidade;
 @Component
 public class CidadeModelConverter extends RepresentationModelAssemblerSupport<Cidade, CidadeModel> {
 	
-	
+	@Autowired
+	private ModelMapper modelMapper;
+
 	public CidadeModelConverter() {
 		super(CidadeController.class, CidadeModel.class);
 	}
 
-	@Autowired
-	private ModelMapper modelMapper;
-
 	@Override
 	public CidadeModel toModel(Cidade Cidade) {
-		CidadeModel cidadeModel =  modelMapper.map(Cidade, CidadeModel.class);
-		
-		 cidadeModel.add(linkTo(methodOn(CidadeController.class)
-				 .listar()).withRel("cidades"));
-		 
-		 cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
-				 .buscar(cidadeModel.getEstado().getId())).withSelfRel());
-		 
+		CidadeModel cidadeModel = modelMapper.map(Cidade, CidadeModel.class);
+
+		cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
+
+		cidadeModel.getEstado()
+				.add(linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId())).withSelfRel());
+
 		return cidadeModel;
 	}
 

@@ -15,17 +15,16 @@ import com.artificer.algafood.domain.model.FormaPagamento;
 public class FormaPagamentoModelConverter
 		extends RepresentationModelAssemblerSupport<FormaPagamento, FormaPagamentoModel> {
 
-	public FormaPagamentoModelConverter() {
-		super(FormaPagamentoController.class, FormaPagamentoModel.class);
-	}
-
 	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
 	private ApiLinks apiLinks;
-	
-	
+
+	public FormaPagamentoModelConverter() {
+		super(FormaPagamentoController.class, FormaPagamentoModel.class);
+	}
+
 	@Override
 	public FormaPagamentoModel toModel(FormaPagamento formaPagamento) {
 		FormaPagamentoModel pagamentoModel = modelMapper.map(formaPagamento, FormaPagamentoModel.class);

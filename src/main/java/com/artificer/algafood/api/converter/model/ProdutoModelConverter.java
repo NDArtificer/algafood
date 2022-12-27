@@ -14,15 +14,15 @@ import com.artificer.algafood.domain.model.Produto;
 @Component
 public class ProdutoModelConverter extends RepresentationModelAssemblerSupport<Produto, ProdutoModel> {
 
-	public ProdutoModelConverter() {
-		super(RestauranteProdutosController.class, ProdutoModel.class);
-	}
-
 	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
 	private ApiLinks apiLinks;
+
+	public ProdutoModelConverter() {
+		super(RestauranteProdutosController.class, ProdutoModel.class);
+	}
 
 	@Override
 	public ProdutoModel toModel(Produto produto) {

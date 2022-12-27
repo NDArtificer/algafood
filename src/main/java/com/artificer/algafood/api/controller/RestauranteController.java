@@ -48,10 +48,6 @@ import com.artificer.algafood.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -78,9 +74,6 @@ public class RestauranteController {
 	private SmartValidator validator;
 
 	@CheckSecurity.Restaurantes.Readable
-	@ApiOperation(value = "Lista Restaurante")
-	@ApiImplicitParams({
-			@ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome", name = "projecao", paramType = "query", type = "string") })
 	@GetMapping
 	// @JsonView(RestauranteView.Resumo.class)
 	public CollectionModel<RestauranteSummaryModel> listar() {
@@ -88,7 +81,6 @@ public class RestauranteController {
 	}
 
 	@CheckSecurity.Restaurantes.Readable
-	@ApiOperation(value = "Lista Restaurante", hidden = true)
 	// @JsonView(RestauranteView.Nome.class)
 	@GetMapping(params = "projecao=nome")
 	public CollectionModel<RestauranteResumoModel> listarNome() {

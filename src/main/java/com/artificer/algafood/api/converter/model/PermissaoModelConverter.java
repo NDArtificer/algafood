@@ -12,18 +12,18 @@ import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.domain.model.Permissao;
 
 @Component
-public class PermissaoModelConverter extends RepresentationModelAssemblerSupport<Permissao, PermissaoModel>{
-
-	public PermissaoModelConverter() {
-		super(GrupoPermissaoController.class, PermissaoModel.class);
-	}
+public class PermissaoModelConverter extends RepresentationModelAssemblerSupport<Permissao, PermissaoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
 	private ApiLinks apiLinks;
-	
+
+	public PermissaoModelConverter() {
+		super(GrupoPermissaoController.class, PermissaoModel.class);
+	}
+
 	public PermissaoModel toModel(Permissao permissao) {
 		var permissaoModel = modelMapper.map(permissao, PermissaoModel.class);
 		return permissaoModel;

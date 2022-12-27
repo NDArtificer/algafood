@@ -17,24 +17,22 @@ import com.artificer.algafood.domain.model.Usuario;
 @Component
 public class UsuarioModelConverter extends RepresentationModelAssemblerSupport<Usuario, UsuarioModel> {
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	public UsuarioModelConverter() {
 		super(UsuarioController.class, UsuarioModel.class);
 	}
 
-	@Autowired
-	private ModelMapper modelMapper;
-	
 	@Override
 	public UsuarioModel toModel(Usuario usuario) {
 		UsuarioModel usuarioModel = modelMapper.map(usuario, UsuarioModel.class);
 
-		usuarioModel
-				.add(linkTo(methodOn(UsuarioController.class).buscar(usuarioModel.getId())).withRel("usuario"));
+		usuarioModel.add(linkTo(methodOn(UsuarioController.class).buscar(usuarioModel.getId())).withRel("usuario"));
 
 		usuarioModel
 				.add(linkTo(methodOn(UsuarioGrupoController.class).listar(usuario.getId())).withRel("grupos-usuario"));
 
-		
 		return usuarioModel;
 	}
 

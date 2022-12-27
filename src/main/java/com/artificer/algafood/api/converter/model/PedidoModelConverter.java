@@ -23,11 +23,6 @@ import com.artificer.algafood.domain.model.Pedido;
 @Component
 public class PedidoModelConverter extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
 
-	public PedidoModelConverter() {
-		super(PedidosController.class, PedidoModel.class);
-
-	}
-
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -36,6 +31,11 @@ public class PedidoModelConverter extends RepresentationModelAssemblerSupport<Pe
 
 	@Autowired
 	private Security security;
+
+	public PedidoModelConverter() {
+		super(PedidosController.class, PedidoModel.class);
+
+	}
 
 	@Override
 	public PedidoModel toModel(Pedido pedido) {

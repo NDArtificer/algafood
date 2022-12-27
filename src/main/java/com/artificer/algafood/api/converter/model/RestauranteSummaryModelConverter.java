@@ -15,15 +15,15 @@ import com.artificer.algafood.domain.model.Restaurante;
 public class RestauranteSummaryModelConverter
 		extends RepresentationModelAssemblerSupport<Restaurante, RestauranteSummaryModel> {
 
-	public RestauranteSummaryModelConverter() {
-		super(RestauranteController.class, RestauranteSummaryModel.class);
-	}
-
 	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
 	private ApiLinks apiLinks;
+
+	public RestauranteSummaryModelConverter() {
+		super(RestauranteController.class, RestauranteSummaryModel.class);
+	}
 
 	@Override
 	public RestauranteSummaryModel toModel(Restaurante restaurante) {

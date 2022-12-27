@@ -13,22 +13,22 @@ import com.artificer.algafood.api.model.CozinhaModel;
 import com.artificer.algafood.domain.model.Cozinha;
 
 @Component
-public class CozinhaModelConverter extends RepresentationModelAssemblerSupport<Cozinha, CozinhaModel>{
+public class CozinhaModelConverter extends RepresentationModelAssemblerSupport<Cozinha, CozinhaModel> {
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	public CozinhaModelConverter() {
 		super(CozinhaController.class, CozinhaModel.class);
 		// TODO Auto-generated constructor stub
 	}
 
-	@Autowired
-	private ModelMapper modelMapper;
-
 	@Override
 	public CozinhaModel toModel(Cozinha cozinha) {
 		CozinhaModel cozinhaModel = modelMapper.map(cozinha, CozinhaModel.class);
-		
+
 		cozinhaModel.add(linkTo(CozinhaController.class).withSelfRel());
-		
+
 		return cozinhaModel;
 	}
 

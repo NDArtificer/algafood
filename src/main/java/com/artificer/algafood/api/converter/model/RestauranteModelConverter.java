@@ -14,15 +14,15 @@ import com.artificer.algafood.domain.model.Restaurante;
 @Component
 public class RestauranteModelConverter extends RepresentationModelAssemblerSupport<Restaurante, RestauranteModel> {
 
-	public RestauranteModelConverter() {
-		super(RestauranteController.class, RestauranteModel.class);
-	}
-
 	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
 	private ApiLinks apiLinks;
+
+	public RestauranteModelConverter() {
+		super(RestauranteController.class, RestauranteModel.class);
+	}
 
 	@Override
 	public RestauranteModel toModel(Restaurante restaurante) {
@@ -34,8 +34,7 @@ public class RestauranteModelConverter extends RepresentationModelAssemblerSuppo
 		restauranteModel.add(apiLinks.linkToRestauranteFormasPagamento(restaurante.getId(), "Forma Pagamento"));
 		restauranteModel.add(apiLinks.linkToResponsaveisRestaurante(restaurante.getId(), "Responsaveis"));
 
-		if (restauranteModel.getEndereco() != null 
-				&& restauranteModel.getEndereco().getCidade() != null) {
+		if (restauranteModel.getEndereco() != null && restauranteModel.getEndereco().getCidade() != null) {
 			restauranteModel.getEndereco().getCidade()
 					.add(apiLinks.linkToCidade(restauranteModel.getEndereco().getCidade().getId()));
 		}

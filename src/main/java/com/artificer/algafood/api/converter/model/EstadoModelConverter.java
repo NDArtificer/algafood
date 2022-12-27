@@ -16,12 +16,12 @@ import com.artificer.algafood.domain.model.Estado;
 @Component
 public class EstadoModelConverter extends RepresentationModelAssemblerSupport<Estado, EstadoModel> {
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	public EstadoModelConverter() {
 		super(EstadoController.class, EstadoModel.class);
 	}
-
-	@Autowired
-	private ModelMapper modelMapper;
 
 	@Override
 	public EstadoModel toModel(Estado estado) {

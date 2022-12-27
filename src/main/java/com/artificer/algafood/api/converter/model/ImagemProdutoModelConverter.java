@@ -12,13 +12,13 @@ import com.artificer.algafood.domain.model.FotoProduto;
 @Component
 public class ImagemProdutoModelConverter extends RepresentationModelAssemblerSupport<FotoProduto, ImagemProdutoModel> {
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	public ImagemProdutoModelConverter() {
 		super(RestauranteProdutoImagemController.class, ImagemProdutoModel.class);
 
 	}
-
-	@Autowired
-	private ModelMapper modelMapper;
 
 	@Override
 	public ImagemProdutoModel toModel(FotoProduto foto) {
