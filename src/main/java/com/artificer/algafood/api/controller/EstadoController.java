@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.artificer.algafood.api.converter.input.EstadoInputConverter;
 import com.artificer.algafood.api.converter.model.EstadoModelConverter;
 import com.artificer.algafood.api.model.EstadoModel;
 import com.artificer.algafood.api.model.input.EstadoInput;
+import com.artificer.algafood.api.openapi.controller.EstadoControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Estado;
 import com.artificer.algafood.domain.repository.EstadoRepository;
@@ -26,7 +28,7 @@ import com.artificer.algafood.domain.service.CadastroEstadoService;
 
 @RestController
 @RequestMapping("/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 	@Autowired
 	private EstadoRepository estadoRepository;
 
@@ -77,9 +79,9 @@ public class EstadoController {
 	@CheckSecurity.Estados.Editble
 	@DeleteMapping("/{estadoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long estadoId) {
-
+	public ResponseEntity<Void> remover(@PathVariable Long estadoId) {
 		cadastroEstado.excluir(estadoId);
+		return ResponseEntity.noContent().build();
 
 	}
 

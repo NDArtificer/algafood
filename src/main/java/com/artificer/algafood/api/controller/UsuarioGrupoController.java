@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.GrupoModelConverter;
 import com.artificer.algafood.api.model.GrupoModel;
+import com.artificer.algafood.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Usuario;
@@ -21,7 +22,7 @@ import com.artificer.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping("/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi{
 
 	@Autowired
 	private CadastroUsuarioService cadastroUsuario;

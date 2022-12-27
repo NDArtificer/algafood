@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.PermissaoModelConverter;
 import com.artificer.algafood.api.model.PermissaoModel;
+import com.artificer.algafood.api.openapi.controller.PermissaoControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Permissao;
 import com.artificer.algafood.domain.repository.PermissaoRepository;
 
 @RestController
 @RequestMapping("/permissoes")
-public class PermissaoController {
+public class PermissaoController implements PermissaoControllerOpenApi {
 
 	@Autowired
 	private PermissaoRepository permissaoRepository;

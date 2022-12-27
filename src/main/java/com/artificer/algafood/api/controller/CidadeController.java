@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.input.CidadeInputConverter;
 import com.artificer.algafood.api.converter.model.CidadeModelConverter;
 import com.artificer.algafood.api.model.CidadeModel;
 import com.artificer.algafood.api.model.input.CidadeInput;
+import com.artificer.algafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.artificer.algafood.api.utils.ResourceUriHelper;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.exception.EstadoNaoEncontradaException;
@@ -27,9 +29,9 @@ import com.artificer.algafood.domain.model.Cidade;
 import com.artificer.algafood.domain.repository.CidadeRepository;
 import com.artificer.algafood.domain.service.CadastroCidadeService;
 
-@Controller
+@RestController
 @RequestMapping("/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
@@ -95,8 +97,9 @@ public class CidadeController {
 	@CheckSecurity.Cidades.Editble
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long cidadeId) {
+	public ResponseEntity<Void> remover(@PathVariable Long cidadeId) {
 		cadastroCidade.excluir(cidadeId);
+		return ResponseEntity.noContent().build();
 
 	}
 

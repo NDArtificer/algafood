@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.artificer.algafood.api.converter.input.FormaPagamentoInputConverter;
 import com.artificer.algafood.api.converter.model.FormaPagamentoModelConverter;
 import com.artificer.algafood.api.model.FormaPagamentoModel;
 import com.artificer.algafood.api.model.input.FormaPagamentoInput;
+import com.artificer.algafood.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.FormaPagamento;
 import com.artificer.algafood.domain.repository.FormaPagamentoRepository;
@@ -26,7 +28,7 @@ import com.artificer.algafood.domain.service.CadastroFormaPagamentoService;
 
 @RestController
 @RequestMapping("/formasPagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
 	@Autowired
 	private CadastroFormaPagamentoService cadastroPagamento;
@@ -56,6 +58,7 @@ public class FormaPagamentoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
+
 		FormaPagamento formaPagamento = formaPagamentoInputConverter.toDomainModel(formaPagamentoInput);
 
 		return formaPagamentoModelConverter.toModel(cadastroPagamento.salvar(formaPagamento));
@@ -75,7 +78,9 @@ public class FormaPagamentoController {
 	@CheckSecurity.FormasPagamento.Editble
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void excluir(@PathVariable Long formaPagamentoId) {
+	public ResponseEntity<Void> remover(@PathVariable Long formaPagamentoId) {
 		cadastroPagamento.excluir(formaPagamentoId);
+		return ResponseEntity.noContent().build();
 	}
+
 }

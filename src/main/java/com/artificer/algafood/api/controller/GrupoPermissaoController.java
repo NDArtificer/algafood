@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.PermissaoModelConverter;
 import com.artificer.algafood.api.model.PermissaoModel;
+import com.artificer.algafood.api.openapi.controller.GrupoPermissaoControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.service.CadastroGrupoService;
 
 @RestController
 @RequestMapping("grupos/{grupoId}/permissoes")
-public class GrupoPermissaoController {
+public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi {
 
 	@Autowired
 	private CadastroGrupoService cadastroGrupo;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.FormaPagamentoModelConverter;
 import com.artificer.algafood.api.model.FormaPagamentoModel;
+import com.artificer.algafood.api.openapi.controller.RestauranteFormasPagamentoControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Restaurante;
@@ -21,7 +22,7 @@ import com.artificer.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/formas-pagamento")
-public class RestauranteFormasPagamentoController {
+public class RestauranteFormasPagamentoController implements RestauranteFormasPagamentoControllerOpenApi {
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestaurante;

@@ -179,7 +179,7 @@ public class ApiLinks {
 	}
 
 	public Link linkToProduto(Long restauranteId, String rel) {
-		return linkTo(methodOn(RestauranteProdutosController.class).Listar(restauranteId, null)).withRel(rel);
+		return linkTo(methodOn(RestauranteProdutosController.class).listar(restauranteId, null)).withRel(rel);
 	}
 
 	public Link linkToProduto(Long restauranteId, Long produtoId) {

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.artificer.algafood.api.converter.model.ImagemProdutoModelConverter;
 import com.artificer.algafood.api.model.ImagemProdutoModel;
 import com.artificer.algafood.api.model.input.ImagemProdutoInput;
+import com.artificer.algafood.api.openapi.controller.RestauranteProdutoImagemControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -37,7 +38,7 @@ import com.artificer.algafood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/imagem")
-public class RestauranteProdutoImagemController {
+public class RestauranteProdutoImagemController implements RestauranteProdutoImagemControllerOpenApi {
 	@Autowired
 	private CadastroProdutoService produtoService;
 
@@ -76,8 +77,9 @@ public class RestauranteProdutoImagemController {
 	@CheckSecurity.Restaurantes.Editable
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void excluirImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+	public ResponseEntity<Void> excluirImagem(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		imagemProdutoService.excluir(restauranteId, produtoId);
+		return ResponseEntity.noContent().build();
 	}
 
 	@CheckSecurity.Restaurantes.Readable
@@ -89,7 +91,7 @@ public class RestauranteProdutoImagemController {
 
 	@GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<InputStreamResource> servirImagem(@PathVariable Long restauranteId,
-			@RequestHeader(name = "accept") String acceptHeader, @PathVariable Long produtoId)
+			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader)
 			throws HttpMediaTypeNotAcceptableException {
 		try {
 			FotoProduto foto = imagemProdutoService.buscar(restauranteId, produtoId);

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.artificer.algafood.api.model.UsuarioModel;
 import com.artificer.algafood.api.model.input.SenhaInput;
 import com.artificer.algafood.api.model.input.UsuarioComSenhaInput;
 import com.artificer.algafood.api.model.input.UsuarioInput;
+import com.artificer.algafood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.repository.UsuarioRepository;
@@ -27,7 +29,7 @@ import com.artificer.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -75,8 +77,9 @@ public class UsuarioController {
 	@CheckSecurity.UsuariosGrupoPermissoes.passwordEditble
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
+	public ResponseEntity<Void> alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
 		usuarioService.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
+		return ResponseEntity.noContent().build();
 	}
 
 }

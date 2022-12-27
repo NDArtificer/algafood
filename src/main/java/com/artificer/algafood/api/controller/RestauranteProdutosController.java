@@ -23,6 +23,7 @@ import com.artificer.algafood.api.converter.input.ProdutoInputConverter;
 import com.artificer.algafood.api.converter.model.ProdutoModelConverter;
 import com.artificer.algafood.api.model.ProdutoModel;
 import com.artificer.algafood.api.model.input.ProdutoInput;
+import com.artificer.algafood.api.openapi.controller.RestauranteProdutosControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Produto;
@@ -33,7 +34,7 @@ import com.artificer.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutosController {
+public class RestauranteProdutosController implements RestauranteProdutosControllerOpenApi {
 
 	@Autowired
 	private CadastroProdutoService cadastroProduto;
@@ -52,9 +53,10 @@ public class RestauranteProdutosController {
 
 	@Autowired
 	private ApiLinks apiLinks;
+
 	@CheckSecurity.Restaurantes.Readable
 	@GetMapping
-	public CollectionModel<ProdutoModel> Listar(@PathVariable Long restauranteId,
+	public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
 			@RequestParam(required = false) Boolean inativos) {
 		Restaurante restaurante = cadastroRestaurante.buscar(restauranteId);
 		List<Produto> produtos = new ArrayList<>();
@@ -75,6 +77,7 @@ public class RestauranteProdutosController {
 		return modelConverter.toModel(cadastroProduto.buscarOuFalhar(restauranteId, produtoId));
 
 	}
+
 	@CheckSecurity.Restaurantes.Editable
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -88,6 +91,7 @@ public class RestauranteProdutosController {
 
 		return modelConverter.toModel(produto);
 	}
+
 	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/{produtoId}")
 	public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
@@ -100,12 +104,14 @@ public class RestauranteProdutosController {
 
 		return modelConverter.toModel(produtoAtual);
 	}
+
 	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/{produtoId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void ativar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		cadastroProduto.ativarProduto(restauranteId, produtoId);
 	}
+
 	@CheckSecurity.Restaurantes.Editable
 	@DeleteMapping("/{produtoId}/inativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

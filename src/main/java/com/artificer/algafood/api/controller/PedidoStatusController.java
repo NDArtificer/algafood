@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artificer.algafood.api.openapi.controller.PedidoStatusControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.service.AlteracaoPedidoService;
 
 @RestController
 @RequestMapping("/pedidos/{codigoPedido}")
-public class PedidoStatusController {
+public class PedidoStatusController implements PedidoStatusControllerOpenApi {
 
 	@Autowired
 	private AlteracaoPedidoService alteracaoService;

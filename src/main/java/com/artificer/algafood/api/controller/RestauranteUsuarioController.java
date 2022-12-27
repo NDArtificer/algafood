@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artificer.algafood.api.converter.model.UsuarioModelConverter;
 import com.artificer.algafood.api.model.UsuarioModel;
+import com.artificer.algafood.api.openapi.controller.RestauranteUsuarioControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Restaurante;
@@ -24,7 +25,7 @@ import com.artificer.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/usuarios")
-public class RestauranteUsuarioController {
+public class RestauranteUsuarioController implements RestauranteUsuarioControllerOpenApi{
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestaurante;

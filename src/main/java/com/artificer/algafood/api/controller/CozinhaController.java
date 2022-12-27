@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.artificer.algafood.api.converter.input.CozinhaInputConverter;
 import com.artificer.algafood.api.converter.model.CozinhaModelConverter;
 import com.artificer.algafood.api.model.CozinhaModel;
 import com.artificer.algafood.api.model.input.CozinhaInput;
+import com.artificer.algafood.api.openapi.controller.CozinhaControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Cozinha;
 import com.artificer.algafood.domain.repository.CozinhaRepository;
@@ -29,7 +31,7 @@ import com.artificer.algafood.domain.service.CadastroCozinhaService;
 
 @RestController
 @RequestMapping("/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -85,7 +87,8 @@ public class CozinhaController {
 	@CheckSecurity.Cozinhas.Editable
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long cozinhaId) {
+	public ResponseEntity<Void> remover(@PathVariable Long cozinhaId) {
 		cadastoCozinha.excluir(cozinhaId);
+		return ResponseEntity.noContent().build();
 	}
 }

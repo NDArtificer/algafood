@@ -23,6 +23,7 @@ import com.artificer.algafood.api.converter.model.PedidoResumoModelConverter;
 import com.artificer.algafood.api.model.PedidoModel;
 import com.artificer.algafood.api.model.PedidoResumoModel;
 import com.artificer.algafood.api.model.input.PedidoInput;
+import com.artificer.algafood.api.openapi.controller.PedidoControllerOpenApi;
 import com.artificer.algafood.core.data.PageWrapper;
 import com.artificer.algafood.core.data.PageableTranslator;
 import com.artificer.algafood.core.security.CheckSecurity;
@@ -37,7 +38,7 @@ import com.artificer.algafood.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping("/pedidos")
-public class PedidosController {
+public class PedidosController implements PedidoControllerOpenApi {
 
 	@Autowired
 	private PedidoRepository pedidoRepository;

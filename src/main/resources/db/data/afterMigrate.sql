@@ -197,7 +197,7 @@ insert into oauth_client_details (client_id, resource_ids, client_secret,
 	access_token_validity, 
 	refresh_token_validity, 
 	autoapprove)
-values ('alga-food-web', null, '$2a$12$MiX05veVCwEMFaxG5t7OZuOpYVSzTApRbF4L2Og7cpvIf6ea6Ttoi', 'READ,WRITE', 'password', null, null, 60 * 60 * 6, 60 * 24 * 60 * 60, null );
+values ('alga-food-web', null, '$2a$12$MiX05veVCwEMFaxG5t7OZuOpYVSzTApRbF4L2Og7cpvIf6ea6Ttoi', 'READ,WRITE', 'password,authorization_code', 'http://authorizatiion-client,http://localhost:8080,http://localhost:8080/swagger-ui/oauth2-redirect.html', null, 60 * 60 * 6, 60 * 24 * 60 * 60, null );
 
 insert into oauth_client_details (client_id, resource_ids, client_secret, 
 	scope, authorized_grant_types, web_server_redirect_uri, authorities, 

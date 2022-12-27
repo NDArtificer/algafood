@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artificer.algafood.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.artificer.algafood.api.utils.ApiLinks;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.statistic.VendasDiaria;
@@ -21,7 +22,7 @@ import com.artificer.algafood.domain.service.VendasReportService;
 
 @RestController
 @RequestMapping("/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
 	@Autowired
 	private VendasQueriesServices vendaService;
@@ -34,7 +35,7 @@ public class EstatisticasController {
 
 	@CheckSecurity.Estatisticas.Readable
 	@GetMapping
-	public EstatisticaModel estatistica() {
+	public EstatisticaModel estatisticas() {
 		var estatisticaModel = new EstatisticaModel();
 
 		estatisticaModel.add(apiLinks.linkToVendasDiarias("Vendas-Diarias"));
@@ -61,7 +62,7 @@ public class EstatisticasController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).headers(headers).body(bytesPdf);
 	}
 
-	private static class EstatisticaModel extends RepresentationModel<EstatisticaModel> {
+	public static class EstatisticaModel extends RepresentationModel<EstatisticaModel> {
 
 	}
 

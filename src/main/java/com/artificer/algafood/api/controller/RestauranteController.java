@@ -36,6 +36,7 @@ import com.artificer.algafood.api.model.RestauranteModel;
 import com.artificer.algafood.api.model.RestauranteResumoModel;
 import com.artificer.algafood.api.model.RestauranteSummaryModel;
 import com.artificer.algafood.api.model.input.RestauranteInput;
+import com.artificer.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.core.validation.ValidationsException;
 import com.artificer.algafood.domain.exception.CidadeNaoEncontradaException;
@@ -50,7 +51,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -190,9 +191,10 @@ public class RestauranteController {
 	@CheckSecurity.Restaurantes.Editable
 	@PutMapping("/ativacoes")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativarRestaurantes(@RequestBody List<Long> restauranteIds) {
+	public ResponseEntity<Void> ativarRestaurantes(@RequestBody List<Long> restauranteIds) {
 		try {
 			cadastroRestaurante.ativar(restauranteIds);
+			return ResponseEntity.noContent().build();
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
@@ -209,9 +211,10 @@ public class RestauranteController {
 
 	@DeleteMapping("/inativacoes")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void inativarRestaurantes(@RequestBody List<Long> restauranteIds) {
+	public ResponseEntity<Void> inativarRestaurantes(@RequestBody List<Long> restauranteIds) {
 		try {
 			cadastroRestaurante.inativar(restauranteIds);
+			return ResponseEntity.noContent().build();
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
