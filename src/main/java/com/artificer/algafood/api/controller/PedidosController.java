@@ -2,8 +2,6 @@ package com.artificer.algafood.api.controller;
 
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +33,8 @@ import com.artificer.algafood.domain.repository.PedidoRepository;
 import com.artificer.algafood.domain.repository.filter.PedidoFilter;
 import com.artificer.algafood.domain.service.CadastroPedidoService;
 import com.artificer.algafood.infrastructure.repository.spec.PedidoSpecs;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pedidos")

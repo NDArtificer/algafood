@@ -1,7 +1,5 @@
 package com.artificer.algafood.infrastructure.repository.service.email;
 
-import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,7 +23,7 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
 
 		try {
 			String body = templateProcessor.processarTemplate(message);
-			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			jakarta.mail.internet.MimeMessage mimeMessage = mailSender.createMimeMessage();
 			MimeMessageHelper mimeHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
 
 			mimeHelper.setFrom(emailProperties.getRemetente());

@@ -1,7 +1,6 @@
 package com.artificer.algafood.api.model.input;
 
-import javax.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

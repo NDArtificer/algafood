@@ -1,7 +1,5 @@
 package com.artificer.algafood.api.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +26,8 @@ import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Cozinha;
 import com.artificer.algafood.domain.repository.CozinhaRepository;
 import com.artificer.algafood.domain.service.CadastroCozinhaService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cozinhas")

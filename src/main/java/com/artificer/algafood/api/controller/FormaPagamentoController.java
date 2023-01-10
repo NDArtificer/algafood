@@ -1,7 +1,5 @@
 package com.artificer.algafood.api.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -25,6 +23,8 @@ import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.FormaPagamento;
 import com.artificer.algafood.domain.repository.FormaPagamentoRepository;
 import com.artificer.algafood.domain.service.CadastroFormaPagamentoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/formasPagamento")

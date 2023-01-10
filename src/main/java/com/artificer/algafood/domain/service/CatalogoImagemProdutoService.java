@@ -3,8 +3,6 @@ package com.artificer.algafood.domain.service;
 import java.io.InputStream;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +10,8 @@ import com.artificer.algafood.domain.exception.FotoNaoEncontradaException;
 import com.artificer.algafood.domain.model.FotoProduto;
 import com.artificer.algafood.domain.repository.ProdutoRepository;
 import com.artificer.algafood.domain.service.FotoStorageService.NovaFoto;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CatalogoImagemProdutoService {

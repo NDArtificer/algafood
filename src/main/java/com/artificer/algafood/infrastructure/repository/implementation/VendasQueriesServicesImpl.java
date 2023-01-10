@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.Predicate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +12,9 @@ import com.artificer.algafood.domain.model.Pedido;
 import com.artificer.algafood.domain.model.statistic.VendasDiaria;
 import com.artificer.algafood.domain.repository.filter.VendaDiariaFilter;
 import com.artificer.algafood.domain.service.VendasQueriesServices;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.Predicate;
 
 @Repository
 public class VendasQueriesServicesImpl implements VendasQueriesServices {
@@ -33,7 +33,7 @@ public class VendasQueriesServicesImpl implements VendasQueriesServices {
 		predicates.add(root.get("status").in(StatusPedido.CONFIRMADO, StatusPedido.ENTREGUE));
 
 		if (filtro.getRestauranteId() != null) {
-			predicates.add(builder.equal(root.get("restaurante"), (filtro.getRestauranteId())));
+			predicates.add(builder.equal(root.get("restaurante").get("id"), (filtro.getRestauranteId())));
 		}
 		if (filtro.getDataCriacaoInicio() != null) {
 			predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), filtro.getDataCriacaoInicio()));

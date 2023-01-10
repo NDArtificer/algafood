@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -45,13 +47,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		// TODO Auto-generated method stub
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		return ResponseEntity.notFound().headers(headers).build();
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatusCode status,
 			WebRequest request) {
 
 		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
@@ -59,7 +60,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 
 		if (rootCause instanceof InvalidFormatException) {
@@ -78,7 +79,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		String path = ex.getPath().stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
 
 		ProblemType problemType = ProblemType.PROPRIEDADE_DESCONHECIDA;
@@ -92,7 +93,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 
 		if (ex instanceof MethodArgumentTypeMismatchException) {
 			return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
@@ -102,7 +103,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
 		ProblemType problemType = ProblemType.PAREMETRO_INVALIDO;
 		String detail = String.format(
@@ -116,7 +117,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 
 		String path = ex.getPath().stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
 
@@ -134,7 +135,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
 
-		HttpStatus status = HttpStatus.NOT_FOUND;
+		HttpStatusCode status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		String detail = ex.getMessage();
 
@@ -144,18 +145,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 
 	}
-	
+
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
 
-		HttpStatus status = HttpStatus.FORBIDDEN;
+		HttpStatusCode status = HttpStatus.FORBIDDEN;
 		ProblemType problemType = ProblemType.ACESSO_NEGADO;
 		String detail = ex.getMessage();
 
 		Problem problem = createProblemBuilder(status, problemType, detail).timeStamp(OffsetDateTime.now())
-				.userMessage(detail)
-				.userMessage("Você não possui permissão para executar essa operação")
-				.build();
+				.userMessage(detail).userMessage("Você não possui permissão para executar essa operação").build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 
@@ -164,7 +163,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(EntidadeEmUsoException.class)
 	public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
 
-		HttpStatus status = HttpStatus.CONFLICT;
+		HttpStatusCode status = HttpStatus.CONFLICT;
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
 		String detail = ex.getMessage();
 
@@ -178,7 +177,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<?> handleNegocio(NegocioException ex, WebRequest request) {
 
-		HttpStatus status = HttpStatus.BAD_REQUEST;
+		HttpStatusCode status = HttpStatus.BAD_REQUEST;
 		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
 		String detail = ex.getMessage();
 
@@ -190,7 +189,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUncaugth(Exception ex, WebRequest request) {
 
-		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		HttpStatusCode status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		String detail = String.format(MSG_UNSPECTED_ERROR);
 
@@ -202,9 +201,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		if (body == null) {
-			body = Problem.builder().title(status.getReasonPhrase()).status(status.value()).build();
+			body = Problem.builder().title(HttpStatus.valueOf(status.value()).getReasonPhrase()).status(status.value())
+					.build();
 		} else if (body instanceof String) {
 			body = Problem.builder().title((String) body).status(status.value()).build();
 		}
@@ -213,7 +213,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", ex.getRequestURL());
@@ -224,7 +224,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResults,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 		String details = String.format("Uma ou mais propriedades estão inválidas.");
@@ -252,7 +252,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
 		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
 
@@ -265,7 +265,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	}
 
-	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+	private Problem.ProblemBuilder createProblemBuilder(HttpStatusCode status, ProblemType problemType, String detail) {
 		return Problem.builder().status(status.value()).type(problemType.getUri()).title(problemType.getTitle())
 				.detail(detail);
 	}

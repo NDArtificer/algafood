@@ -24,7 +24,14 @@ public class Security {
 
 	public Long getUsurioId() {
 		Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-		return jwt.getClaim("usuario_id");
+
+		Object usuarioId = jwt.getClaim("usuario_id");
+
+		if (usuarioId == null) {
+			return null;
+		}
+
+		return Long.valueOf(usuarioId.toString());
 	}
 
 	public boolean manageRestaurante(Long restauranteId) {

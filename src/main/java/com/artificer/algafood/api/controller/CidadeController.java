@@ -1,7 +1,5 @@
 package com.artificer.algafood.api.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -28,6 +26,8 @@ import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Cidade;
 import com.artificer.algafood.domain.repository.CidadeRepository;
 import com.artificer.algafood.domain.service.CadastroCidadeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cidades")

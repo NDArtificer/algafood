@@ -1,14 +1,13 @@
 package com.artificer.algafood.api.model.input;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.artificer.algafood.core.validation.FileContentType;
 import com.artificer.algafood.core.validation.FileSize;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,5 @@
 package com.artificer.algafood.api.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -26,6 +24,8 @@ import com.artificer.algafood.core.security.CheckSecurity;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.repository.UsuarioRepository;
 import com.artificer.algafood.domain.service.CadastroUsuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")

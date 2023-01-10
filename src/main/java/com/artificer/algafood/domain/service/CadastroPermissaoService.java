@@ -1,13 +1,13 @@
 package com.artificer.algafood.domain.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artificer.algafood.domain.exception.NegocioException;
 import com.artificer.algafood.domain.model.Permissao;
 import com.artificer.algafood.domain.repository.PermissaoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CadastroPermissaoService {

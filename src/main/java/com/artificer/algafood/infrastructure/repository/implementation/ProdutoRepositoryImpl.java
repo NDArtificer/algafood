@@ -1,13 +1,13 @@
 package com.artificer.algafood.infrastructure.repository.implementation;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Repository;
 
 import com.artificer.algafood.domain.model.FotoProduto;
 import com.artificer.algafood.domain.repository.ProdutoRepositoryQueries;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {

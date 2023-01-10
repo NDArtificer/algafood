@@ -1,7 +1,5 @@
 package com.artificer.algafood.domain.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +9,8 @@ import com.artificer.algafood.domain.exception.EntidadeEmUsoException;
 import com.artificer.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.artificer.algafood.domain.model.Estado;
 import com.artificer.algafood.domain.repository.EstadoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CadastroEstadoService {

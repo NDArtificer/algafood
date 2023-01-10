@@ -1,7 +1,5 @@
 package com.artificer.algafood.domain.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,6 +10,8 @@ import com.artificer.algafood.domain.exception.GrupoNaoEncontradaException;
 import com.artificer.algafood.domain.model.Grupo;
 import com.artificer.algafood.domain.model.Permissao;
 import com.artificer.algafood.domain.repository.GrupoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CadastroGrupoService {

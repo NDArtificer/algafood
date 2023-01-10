@@ -1,7 +1,5 @@
 package com.artificer.algafood.domain.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +12,8 @@ import com.artificer.algafood.domain.model.Produto;
 import com.artificer.algafood.domain.model.Restaurante;
 import com.artificer.algafood.domain.model.Usuario;
 import com.artificer.algafood.domain.repository.PedidoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CadastroPedidoService {

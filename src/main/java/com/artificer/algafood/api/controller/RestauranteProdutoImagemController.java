@@ -3,8 +3,6 @@ package com.artificer.algafood.api.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +33,8 @@ import com.artificer.algafood.domain.service.CadastroProdutoService;
 import com.artificer.algafood.domain.service.CatalogoImagemProdutoService;
 import com.artificer.algafood.domain.service.FotoStorageService;
 import com.artificer.algafood.domain.service.FotoStorageService.FotoRecuperada;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/imagem")

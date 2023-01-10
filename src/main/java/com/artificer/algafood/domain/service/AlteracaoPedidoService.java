@@ -1,12 +1,12 @@
 package com.artificer.algafood.domain.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artificer.algafood.domain.model.Pedido;
 import com.artificer.algafood.domain.repository.PedidoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AlteracaoPedidoService {
