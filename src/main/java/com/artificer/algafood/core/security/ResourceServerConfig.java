@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,46 +17,38 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
 public class ResourceServerConfig {
 
 	@Bean
 	public SecurityFilterChain resourceFilterChain(HttpSecurity http) throws Exception {
-		 http.authorizeRequests()
-				.antMatchers("/oauth2/**")
-				.authenticated()
-				.and()
-				.csrf().disable()
-				.cors().and()
+		http.authorizeRequests().antMatchers("/oauth2/**").authenticated().and().cors().and().csrf().disable()
 				.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
-		
-		 return http.formLogin(Customizer.withDefaults()).build();
+
+		return http.formLogin(customizer -> customizer.loginPage("/login")).build();
 	}
-	
-	
-    private JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
-        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            List<String> authorities = jwt.getClaimAsStringList("authorities");
+	private JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
-            if (authorities == null) {
-                return Collections.emptyList();
-            }
+		converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+			List<String> authorities = jwt.getClaimAsStringList("authorities");
 
-            JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-            Collection<GrantedAuthority> grantedAuthorities = authoritiesConverter.convert(jwt);
+			if (authorities == null) {
+				return Collections.emptyList();
+			}
 
-            grantedAuthorities.addAll(authorities
-                    .stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList()));
+			JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+			Collection<GrantedAuthority> grantedAuthorities = authoritiesConverter.convert(jwt);
 
-            return grantedAuthorities;
-        });
+			grantedAuthorities
+					.addAll(authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
-        return converter;
-    }
+			return grantedAuthorities;
+		});
+
+		return converter;
+	}
 
 }

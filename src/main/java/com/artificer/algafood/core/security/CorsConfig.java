@@ -14,20 +14,21 @@ import org.springframework.web.filter.CorsFilter;
 public class CorsConfig {
 
 	@Bean
-	public FilterRegistrationBean<CorsFilter> corFilterRegistrationBean(){
+	public FilterRegistrationBean<CorsFilter> corFilterRegistrationBean() {
 		CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.setAllowCredentials(false);
 		corsConfig.setAllowedOriginPatterns(Collections.singletonList("*"));
-		corsConfig.setAllowedMethods(Collections.singletonList("*"));;
-		corsConfig.setAllowedHeaders(Collections.singletonList("*"));;
-		
-		UrlBasedCorsConfigurationSource source  = new UrlBasedCorsConfigurationSource();
+		corsConfig.setAllowedMethods(Collections.singletonList("*"));
+		corsConfig.setAllowedHeaders(Collections.singletonList("*"));
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfig);
-		
+
 		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>();
 		bean.setFilter(new CorsFilter(source));
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-		
+
 		return bean;
 	}
-	
+
 }

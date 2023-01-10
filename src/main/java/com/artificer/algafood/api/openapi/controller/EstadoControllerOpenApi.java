@@ -24,9 +24,9 @@ public interface EstadoControllerOpenApi {
 
 	@Operation(summary = "Busca um estado por Id", responses = { @ApiResponse(responseCode = "200"),
 			@ApiResponse(responseCode = "400", description = "ID do estado inválido", content = {
-					@Content(schema = @Schema(ref = "Problema")) }),
+					@Content(schema = @Schema(ref = "Problem")) }),
 			@ApiResponse(responseCode = "404", description = "Estado não encontrado", content = {
-					@Content(schema = @Schema(ref = "Problema")) }) })
+					@Content(schema = @Schema(ref = "Problem")) }) })
 	EstadoModel buscar(@Parameter(description = "Id de um estado", example = "1", required = true) Long estadoId);
 
 	@Operation(summary = "Cadastra um estado", responses = {
@@ -37,7 +37,7 @@ public interface EstadoControllerOpenApi {
 	@Operation(summary = "Atualiza um estado por Id", responses = {
 			@ApiResponse(responseCode = "200", description = "Estado atualizado"),
 			@ApiResponse(responseCode = "404", description = "Estado não encontrado", content = {
-					@Content(schema = @Schema(ref = "Problema")) }) })
+					@Content(schema = @Schema(ref = "Problem")) }) })
 
 	EstadoModel atualizar(@Parameter(description = "Id de um estado", example = "1", required = true) Long estadoId,
 			@RequestBody(description = "Representação de um estado com os novos dados", required = true) EstadoInput estadoInput);
@@ -45,7 +45,7 @@ public interface EstadoControllerOpenApi {
 	@Operation(summary = "Exclui um estado por Id", responses = {
 			@ApiResponse(responseCode = "204", description = "Estado excluído"),
 			@ApiResponse(responseCode = "404", description = "Estado não encontrado", content = {
-					@Content(schema = @Schema(ref = "Problema")) }) })
+					@Content(schema = @Schema(ref = "Problem")) }) })
 	ResponseEntity<Void> remover(
 			@Parameter(description = "Id de um estado", example = "1", required = true) Long estadoId);
 
