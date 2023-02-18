@@ -15,11 +15,11 @@ public class RootEntryPointController {
 
 	@Autowired
 	private ApiLinks apiLinks;
-	
-	@GetMapping
+
+	@GetMapping(value = "/")	
 	public RootEntryPointModel root() {
 		var rootEntryPoint = new RootEntryPointModel();
-		
+
 		rootEntryPoint.add(apiLinks.linkToCozinhas("Cozinhas"));
 		rootEntryPoint.add(apiLinks.linkToPedidos("Pedidos"));
 		rootEntryPoint.add(apiLinks.linkToRestaurante("Restaurantes"));
@@ -29,7 +29,7 @@ public class RootEntryPointController {
 		rootEntryPoint.add(apiLinks.linkToPermissoes("Permissoes"));
 		rootEntryPoint.add(apiLinks.linkToFormaPagamento("Forma Pagamento"));
 		rootEntryPoint.add(apiLinks.linkToEstatisticas("Estatisticas"));
-		
+
 		return rootEntryPoint;
 	}
 
