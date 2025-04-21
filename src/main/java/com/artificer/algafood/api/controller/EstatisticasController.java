@@ -59,7 +59,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
 		var headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=vendas-diarias.pdf");
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).headers(headers).body(bytesPdf);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytesPdf);
 	}
 
 	public static class EstatisticaModel extends RepresentationModel<EstatisticaModel> {
